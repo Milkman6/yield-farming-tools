@@ -1,130 +1,108 @@
-import { ethers } from 'ethers'
-import { priceLookupService } from '../../services/price-lookup-service'
-import { PoolData, TokenData } from '../../types'
+import { PoolToken, StakingPool, Token } from '../../data/token'
+import { PoolData } from '../../types'
 import { get_synth_weekly_rewards, toDollar, toFixed } from '../utils'
-import { YCRV_TOKEN as yCrvToken } from '../../data/token-data'
+
+type RequiredTokens = {
+  stakingPool: StakingPool
+  liquidityPool: PoolToken
+  rewardToken: Token
+}
 
 export async function getSnxBasedBalPool(
-  App,
-  poolToken1: TokenData,
-  poolToken2: TokenData,
-  rewardToken: TokenData,
-  balPoolToken: TokenData,
-  rewardStakingPool: TokenData,
+  { stakingPool, liquidityPool, rewardToken }: RequiredTokens,
   poolData: PoolData
 ) {
-  const STAKING_POOL = new ethers.Contract(
-    rewardStakingPool.address,
-    rewardStakingPool.ABI,
-    App.provider
+  console.log('starting')
+  const poolToken1 = liquidityPool.poolToken1
+  const poolToken2 = liquidityPool.poolToken2
+
+  console.log('2', poolToken1, poolToken2)
+  const yourStakedTokens = await stakingPool.getBalance(global.App.YOUR_ADDRESS)
+  console.log('3', yourStakedTokens)
+
+  const totalStakedLiqTokens = await liquidityPool.getBalance(
+    stakingPool.address
   )
 
-  const BAL_POOL = new ethers.Contract(
-    balPoolToken.address,
-    balPoolToken.ABI,
-    App.provider
-  )
+  const weeklyReward = await get_synth_weekly_rewards(stakingPool)
+  const yourEarnedRewards = await stakingPool.getMyRewards()
+  console.log('4', weeklyReward, yourEarnedRewards)
 
-  const POOL_TOKEN_1 = new ethers.Contract(
-    poolToken1.address,
-    poolToken1.ABI,
-    App.provider
-  )
+  const rewardPerToken = weeklyReward / totalStakedLiqTokens
 
-  const REWARD_TOKEN = new ethers.Contract(
-    rewardToken.address,
-    rewardToken.ABI,
-    App.provider
-  )
-
-  let scalingFactor
-
-  try {
-    scalingFactor = await REWARD_TOKEN.yamsScalingFactor()
-  } catch (e) {}
-
-  const totalTokenOneInBalPool =
-    (await POOL_TOKEN_1.balanceOf(balPoolToken.address)) / 1e18
-  const totalRewardTokenInBalPool =
-    (await REWARD_TOKEN.balanceOf(balPoolToken.address)) / 1e18
-
-  const stakedBalTokens =
-    (await STAKING_POOL.balanceOf(App.YOUR_ADDRESS)) / 1e18
-
-  const totalSupplyOfStakingToken = (await BAL_POOL.totalSupply()) / 1e18
-  const totalStakedBalTokens =
-    (await BAL_POOL.balanceOf(rewardStakingPool.address)) / 1e18
-
-  let weeklyReward
-  let yourEarnedRewards
-  if (scalingFactor) {
-    weeklyReward =
-      ((await get_synth_weekly_rewards(STAKING_POOL)) * scalingFactor) / 1e18
-    yourEarnedRewards =
-      ((scalingFactor / 1e18) * (await STAKING_POOL.earned(App.YOUR_ADDRESS))) /
-      1e18
-  } else {
-    weeklyReward = await get_synth_weekly_rewards(STAKING_POOL)
-    yourEarnedRewards = (await STAKING_POOL.earned(App.YOUR_ADDRESS)) / 1e18
-  }
-
-  const rewardPerToken = weeklyReward / totalStakedBalTokens
-
-  const prices = await priceLookupService.getPrices([
-    poolToken1.tokenId,
-    rewardToken.tokenId,
-  ])
-  const poolToken1Price = prices[poolToken1.tokenId]
-  const rewardTokenPrice = prices[rewardToken.tokenId]
-
-  const stakingTokenPrice =
-    (totalRewardTokenInBalPool * rewardTokenPrice +
-      totalTokenOneInBalPool * poolToken1Price) /
-    totalSupplyOfStakingToken
+  console.log('5', rewardPerToken)
 
   const weeklyRoi =
-    (rewardPerToken * rewardTokenPrice * 100) / stakingTokenPrice
+    (rewardPerToken * (await rewardToken.getPrice()) * 100) /
+    (await liquidityPool.getPrice())
+  console.log(
+    rewardPerToken,
+    await rewardToken.getPrice(),
+    await liquidityPool.getPrice()
+  )
+  console.log('6', weeklyRoi)
+
+  const priceData = [
+    { label: poolToken1.ticker, value: poolToken1.price },
+    { label: poolToken2.ticker, value: poolToken2.price },
+    { label: liquidityPool.ticker, value: liquidityPool.price },
+  ]
+
+  console.log(
+    'liquidityPool.address',
+    liquidityPool.address,
+    poolData.links[2].link
+  )
+
+  if (
+    rewardToken.ticker !== poolToken1.ticker &&
+    rewardToken.ticker !== poolToken2.ticker
+  ) {
+    priceData.push({ label: rewardToken.ticker, value: rewardToken.price })
+  }
 
   return {
     provider: poolData.provider,
-    name: `${poolData.name} ${poolToken1.ticker}/${rewardToken.ticker}`,
+    name: `${poolData.name} ${poolToken1.ticker}/${poolToken2.ticker}`,
     poolRewards: [rewardToken.ticker],
-    links: poolData.links,
-    risk: poolData.risk,
-    apr: toFixed(weeklyRoi * 52, 4),
-    prices: [
-      { label: poolToken1.ticker, value: toDollar(poolToken1Price) },
-      { label: rewardToken.ticker, value: toDollar(rewardTokenPrice) },
-      { label: balPoolToken.ticker, value: toDollar(stakingTokenPrice) },
+    links: [
+      ...poolData.links.slice(0, 2),
+      {
+        title: poolData.links[2].title,
+        link: poolData.links[2].link + liquidityPool.address.toLowerCase(),
+      },
     ],
+    risk: poolData.risk,
+    apr: weeklyRoi * 52,
+    prices: priceData,
     staking: [
       {
         label: 'Pool Total',
-        value: toDollar(totalStakedBalTokens * stakingTokenPrice),
+        value: totalStakedLiqTokens * liquidityPool.price,
       },
       {
         label: 'Your Total',
-        value: toDollar(stakedBalTokens * stakingTokenPrice),
+        value: yourStakedTokens * liquidityPool.price,
       },
     ],
     rewards: [
       {
         label: `${toFixed(yourEarnedRewards, 4)} ${rewardToken.ticker}`,
-        value: toDollar(yourEarnedRewards * rewardTokenPrice),
+        value: yourEarnedRewards * rewardToken.price,
       },
     ],
     ROIs: [
       {
         label: 'Hourly',
-        value: `${toFixed(weeklyRoi / 7 / 24, 4)}%`,
+        value: weeklyRoi / 7 / 24,
       },
       {
         label: 'Daily',
-        value: `${toFixed(weeklyRoi / 7, 4)}%`,
+        value: weeklyRoi / 7,
       },
       {
         label: 'Weekly',
-        value: `${toFixed(weeklyRoi, 4)}%`,
+        value: weeklyRoi,
       },
     ],
   }

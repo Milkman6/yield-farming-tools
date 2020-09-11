@@ -1,7 +1,7 @@
 import {
   ERC20_ABI,
   YFFI_REWARD_CONTRACT_ABI,
-  Y_STAKING_POOL_ABI,
+  SYNTHETIX_STAKING_ABI,
 } from '../../../data/constants'
 import { DAI_TOKEN, SHRIMP_TOKEN, ZOMBIE_TOKEN } from '../../../data/token-data'
 import { PoolData, RiskLevel, TokenData } from '../../../types'
@@ -26,7 +26,7 @@ const poolData: PoolData = {
 
 const daiStakingPool: TokenData = {
   address: '0xd55BD2C12B30075b325Bc35aEf0B46363B3818f8',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const daiPool = async (App) =>
   await getSnxBasedStakingData(
@@ -39,7 +39,7 @@ export const daiPool = async (App) =>
 
 const shrimpStakingPool: TokenData = {
   address: '0xa8ed29d39Ec961Ded44451D38e56B609Fe08126e',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const shrimpPool = async (App) =>
   await getSnxBasedStakingData(

@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { RiskLevel } from '../types'
 import { toNumber } from '../utils/utils'
-import { usePoolContext } from './Pools'
+import { usePoolContext } from '../contexts/PoolContext'
 import { MinusIcon, AddIcon } from '@chakra-ui/icons'
 
 export const Filters = () => {
@@ -94,17 +94,17 @@ export const Filters = () => {
 
     if (showOnlyMyPools) {
       passesFilters =
-        toNumber(item?.staking[1]?.value) > 0 ||
-        (item?.rewards?.length > 0 && toNumber(item?.rewards[0]?.value) > 0)
+        item?.staking[1]?.value > 0 ||
+        (item?.rewards?.length > 0 && item?.rewards[0]?.value > 0)
     }
 
     if (passesFilters && !showLowApr) {
-      passesFilters = toNumber(item?.apr) > 2
+      passesFilters = item?.apr > 2
     }
 
     if (passesFilters && !showLowLiq) {
       passesFilters =
-        !item?.staking[0]?.value || toNumber(item?.staking[0]?.value) > 200000
+        !item?.staking[0]?.value || item?.staking[0]?.value > 200000
     }
 
     if (passesFilters && providersFiltered) {

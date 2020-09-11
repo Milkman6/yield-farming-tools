@@ -27,100 +27,12 @@ import CountUp from 'react-countup'
 import { useEthContext } from '../contexts/ProviderContext'
 import { LoadState, RiskLevel } from '../types'
 import { getPools } from '../utils/pool-data'
-import { toDollar, toNumber } from '../utils/utils'
+import { toDollar, toNumber, toFixed, toPercent } from '../utils/utils'
 import { Card } from './Card'
 import { useFilterSidebarContext } from './FilterSidebar'
 import { useWalletModalContext } from './Sidebar'
 import { PLACEHOLDER_ADDRESS } from '../data/constants'
-
-const usePools = () => {
-  const { ethApp } = useEthContext()
-  const [pools, setPools] = useState([])
-  const [filteredPools, setFilteredPools] = useState([])
-  const [expandAll, setExpandAll] = useState(false)
-  const [expandAllStateChanged, setExpandAllStateChanged] = useState(0)
-  const [loadState, setLoadState] = useState(LoadState.LOADED)
-  const [totalWeeklyRoi, setTotalWeeklyRoi] = useState(0)
-  const [poolPositions, setPoolPositions] = useState([])
-  const [yourPoolGroupings, setYourPoolGroupings] = useState({})
-
-  const expandOrCollapseAll = (value: boolean) => {
-    setExpandAllStateChanged(expandAllStateChanged + 1)
-    setExpandAll(value)
-  }
-
-  const getPoolInfo = async () => {
-    if (ethApp && typeof window !== 'undefined') {
-      setLoadState(LoadState.LOADING)
-
-      const fetchedPools = []
-      const yourPoolPositions = []
-      let weeklyRoi = 0
-      await Promise.all(
-        Object.values(getPools).map(
-          (getPoolData) =>
-            new Promise((resolve) => {
-              ;(getPoolData(ethApp) as any)
-                .then((data) => {
-                  fetchedPools.push(data)
-                  if (data?.staking[1]?.value) {
-                    if (data?.ROIs[2]?.value) {
-                      const roi =
-                        (toNumber(data.ROIs[2].value) *
-                          toNumber(data.staking[1].value)) /
-                        100
-                      weeklyRoi += roi
-                    }
-                    if (toNumber(data?.staking[1]?.value) > 10) {
-                      yourPoolPositions.push(data)
-                    }
-                  }
-                  resolve()
-                })
-                .catch((e) => {
-                  console.error(e)
-                  resolve()
-                })
-            })
-        )
-      )
-
-      const yourPools = yourPoolPositions.reduce((acc, item) => {
-        const key = item.provider
-        acc[key] = acc[key] || []
-        acc[key].push(item)
-        return acc
-      }, {})
-
-      setTotalWeeklyRoi(weeklyRoi)
-      setPoolPositions(yourPoolPositions)
-      setYourPoolGroupings(yourPools)
-      setPools(fetchedPools)
-      setLoadState(LoadState.LOADED)
-    }
-  }
-
-  useMemo(() => getPoolInfo(), [ethApp])
-
-  return {
-    pools,
-    setPools,
-    filteredPools,
-    setFilteredPools,
-    expandAll,
-    expandAllStateChanged,
-    expandOrCollapseAll,
-    loadState,
-    setLoadState,
-    totalWeeklyRoi,
-    setTotalWeeklyRoi,
-    poolPositions,
-    setPoolPositions,
-    getPoolInfo,
-    yourPoolGroupings,
-  }
-}
-export const [PoolProvider, usePoolContext] = constate(usePools)
+import { usePoolContext } from '../contexts/PoolContext'
 
 export const PoolSection: React.FC<{ prefetchedPools: any }> = ({
   prefetchedPools,
@@ -244,7 +156,7 @@ const PoolItem = ({ poolItemData }) => {
         </Box>
         <Text display="flex" alignItems="center">
           {poolItemData.apr ? (
-            `${poolItemData.apr}%`
+            `${toFixed(poolItemData.apr, 2)}%`
           ) : (
             <Skeleton height="20px" maxW={20} />
           )}
@@ -265,7 +177,7 @@ const PoolItem = ({ poolItemData }) => {
         <SimpleGrid minChildWidth="212px" spacing={4} cursor="auto">
           <LinkList links={poolItemData.links || []} />
           <DetailItem title="Prices" data={poolItemData.prices} />
-          <DetailItem title="ROI" data={poolItemData.ROIs} />
+          <DetailItem title="ROI" data={poolItemData.ROIs} asPercent={true} />
           {poolItemData.staking?.length > 0 && (
             <DetailItem title="Staking" data={poolItemData.staking} />
           )}
@@ -375,7 +287,7 @@ const LinkList = ({ links }) => (
   </Box>
 )
 
-const DetailItem = ({ title, data, totalValue = '' }) =>
+const DetailItem = ({ title, data, asPercent = false }) =>
   data && data.length > 0 ? (
     <Box>
       <Heading as="h4" size="sm" color="gray.600" pb={2}>
@@ -389,7 +301,7 @@ const DetailItem = ({ title, data, totalValue = '' }) =>
                 {label}
               </Text>
               <Text key={value} pb=".1rem">
-                {value}
+                {asPercent ? toPercent(value, 4) : toDollar(value)}
               </Text>
             </>
           ))}
@@ -417,12 +329,11 @@ export const EarningsSection = ({ ...props }) => {
 
   const totalClaimableRewards = poolPositions?.reduce(
     (total, item) =>
-      total +
-      (item?.rewards?.length > 0 ? toNumber(item?.rewards[0]?.value) : 0),
+      total + (item?.rewards?.length > 0 ? item?.rewards[0]?.value : 0),
     0
   )
   const totalPoolPositions = poolPositions?.reduce(
-    (total, item) => total + toNumber(item?.staking[1]?.value),
+    (total, item) => total + item?.staking[1]?.value,
     0
   )
   const rois = [
@@ -454,7 +365,7 @@ export const EarningsSection = ({ ...props }) => {
               <Stat>
                 <StatNumber>
                   <CountUp
-                    end={toNumber(rois[roiView].value)}
+                    end={rois[roiView].value}
                     decimals={2}
                     separator=","
                     prefix="$"
@@ -521,7 +432,7 @@ export const YourPools: React.FC = () => {
   useEffect(() => {
     const filteredPools = pools.filter(
       (item) =>
-        toNumber(item?.staking[1]?.value) > 5 ||
+        item?.staking[1]?.value > 5 ||
         (item?.rewards?.length > 0 && toNumber(item?.rewards[0]?.value) > 10)
     )
     setYourPools(filteredPools)

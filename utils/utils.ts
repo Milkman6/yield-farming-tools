@@ -19,6 +19,11 @@ export const toFixed = function (num, fixed) {
   }
 }
 
+export const toPercent = (num, fixed) => {
+  const fixedNum = toFixed(num, fixed)
+  return `${fixedNum}%`
+}
+
 export const lookUpPrices = async function (id_array) {
   let ids = id_array.join('%2C')
   const prices = await axios.get(
@@ -133,3 +138,13 @@ export const abbrWallet = (address) =>
     address.length - 5,
     address.length - 1
   )}`
+
+export async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
+
+export async function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

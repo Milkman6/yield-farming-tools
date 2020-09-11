@@ -620,7 +620,8 @@ export const YFII_DAI_BPT_TOKEN_ADDR =
   '0x16cAC1403377978644e78769Daa49d8f6B6CF565'
 
 // UMA
-export const YUSD_USDC_BPT_TOKEN_ADDR = '0xD2F574637898526FCddfb3D487cc73c957Fa0268'
+export const YUSD_USDC_BPT_TOKEN_ADDR =
+  '0xD2F574637898526FCddfb3D487cc73c957Fa0268'
 
 // usdc-SNX pool
 
@@ -6730,7 +6731,7 @@ export const UNISWAP_SXAU_USDC_POOL_ABI = [
 // ygov
 
 export const Y_STAKING_POOL_ADDR = '0x0001FB050Fe7312791bF6475b96569D83F695C9f'
-export const Y_STAKING_POOL_ABI = [
+export const SYNTHETIX_STAKING_ABI = [
   {
     anonymous: false,
     inputs: [

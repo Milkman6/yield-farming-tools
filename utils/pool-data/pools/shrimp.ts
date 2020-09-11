@@ -1,7 +1,7 @@
 import {
   ERC20_ABI,
   YFFI_REWARD_CONTRACT_ABI,
-  Y_STAKING_POOL_ABI,
+  SYNTHETIX_STAKING_ABI,
 } from '../../../data/constants'
 import { getSnxBasedStakingData } from '../../pool-templates/staking'
 import {
@@ -34,7 +34,7 @@ const poolData: PoolData = {
 
 const compStakingPool: TokenData = {
   address: '0xadceEB763dbd6F9bA7eFb7564AF2518a7fB49e7b',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const compPool = async (App) =>
   await getSnxBasedStakingData(
@@ -47,7 +47,7 @@ export const compPool = async (App) =>
 
 const creamStakingPool: TokenData = {
   address: '0xa8ed29d39Ec961Ded44451D38e56B609Fe08126e',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const creamPool = async (App) =>
   await getSnxBasedStakingData(
@@ -60,7 +60,7 @@ export const creamPool = async (App) =>
 
 const wethStakingPool: TokenData = {
   address: '0x7127EE43FAFba873ce985683AB79dF2ce2912198',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const wethPool = async (App) =>
   await getSnxBasedStakingData(
@@ -73,7 +73,7 @@ export const wethPool = async (App) =>
 
 const yfiStakingPool: TokenData = {
   address: '0x9f83883FD3cadB7d2A83a1De51F9Bf483438122e',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yfiPool = async (App) =>
   await getSnxBasedStakingData(
@@ -110,7 +110,7 @@ export const shrimpYcrvPool = async (App) =>
 
 //   const diceStakingPool: TokenData = {
 //     address: '0x9f83883FD3cadB7d2A83a1De51F9Bf483438122e',
-//     ABI: Y_STAKING_POOL_ABI,
+//     ABI: SYNTHETIX_STAKING_ABI,
 //   }
 //   export const dicePool = async (App) =>
 //     await getSnxBasedStakingData(

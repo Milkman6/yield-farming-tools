@@ -1,4 +1,4 @@
-import { Y_STAKING_POOL_ABI } from '../../../data/constants'
+import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
 import { getSnxBasedStakingData } from '../../pool-templates/staking'
 import {
   WETH_TOKEN,
@@ -32,7 +32,7 @@ const poolData: PoolData = {
 
 const wethStakingPool: TokenData = {
   address: '0xd9c5472986A1a6E12390ceeb7a28A2D236D5CA02',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamcWethPool = async (App) => {
   return await getSnxBasedStakingData(
@@ -47,7 +47,7 @@ export const yamcWethPool = async (App) => {
 
 const yCrvStakingPool: TokenData = {
   address: '0xE29b7D23e47c16B8EedF50a17A03649F5Db35433',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yCrvPool = async (App) =>
   await getSnxBasedStakingData(

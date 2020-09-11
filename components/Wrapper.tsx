@@ -13,7 +13,7 @@ import { useAnalytics } from '../hooks/useAnalytics'
 import { theme } from '../theme'
 import { FilterSidebarProvider } from './FilterSidebar'
 import { NavSidebarProvider } from './NavSidebar'
-import { PoolProvider } from './Pools'
+import { PoolProvider } from '../contexts/PoolContext'
 import 'focus-visible/dist/focus-visible'
 import { WalletModalProvider } from './Sidebar'
 

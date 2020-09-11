@@ -2,7 +2,7 @@ import {
   ERC20_ABI,
   YAM_YCRV_UNI_TOKEN_ADDR,
   YFFI_REWARD_CONTRACT_ABI,
-  Y_STAKING_POOL_ABI,
+  SYNTHETIX_STAKING_ABI,
 } from '../../../data/constants'
 import { getSnxBasedStakingData } from '../../pool-templates/staking'
 import {
@@ -41,7 +41,7 @@ const poolData: PoolData = {
 
 const yfiStakingPool: TokenData = {
   address: '0xc5B6488c7D5BeD173B76Bd5DCA712f45fB9EaEaB',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamYfiPool = async (App) =>
   await getSnxBasedStakingData(
@@ -54,7 +54,7 @@ export const yamYfiPool = async (App) =>
 
 const compStakingPool: TokenData = {
   address: '0x8538E5910c6F80419CD3170c26073Ff238048c9E',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamCompPool = async (App) =>
   await getSnxBasedStakingData(
@@ -67,7 +67,7 @@ export const yamCompPool = async (App) =>
 
 const lendStakingPool: TokenData = {
   address: '0x6009A344C7F993B16EBa2c673fefd2e07f9be5FD',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamLendPool = async (App) =>
   await getSnxBasedStakingData(
@@ -80,7 +80,7 @@ export const yamLendPool = async (App) =>
 
 const linkStakingPool: TokenData = {
   address: '0xFDC28897A1E32B595f1f4f1D3aE0Df93B1eee452',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamLinkPool = async (App) =>
   await getSnxBasedStakingData(
@@ -93,7 +93,7 @@ export const yamLinkPool = async (App) =>
 
 const mkrStakingPool: TokenData = {
   address: '0xcFe1E539AcB2D489a651cA011a6eB93d32f97E23',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamMkrPool = async (App) =>
   await getSnxBasedStakingData(
@@ -106,7 +106,7 @@ export const yamMkrPool = async (App) =>
 
 const snxStakingPool: TokenData = {
   address: '0x6c3FC1FFDb14D92394f40eeC91D9Ce8B807f132D',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamSnxPool = async (App) =>
   await getSnxBasedStakingData(
@@ -119,7 +119,7 @@ export const yamSnxPool = async (App) =>
 
 const wethStakingPool: TokenData = {
   address: '0x587A07cE5c265A38Dd6d42def1566BA73eeb06F5',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const yamWethPool = async (App) =>
   await getSnxBasedStakingData(

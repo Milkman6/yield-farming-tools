@@ -3,7 +3,7 @@ import {
   ERC20_ABI,
   LINK_TOKEN_ADDR,
   YFL_POOL_0_ADDR,
-  Y_STAKING_POOL_ABI,
+  SYNTHETIX_STAKING_ABI,
 } from '../../../../data/constants'
 import { priceLookupService } from '../../../../services/price-lookup-service'
 import { get_synth_weekly_rewards, toDollar, toFixed } from '../../../utils'
@@ -15,7 +15,7 @@ export default async function main(App) {
 
   const LINK_STAKING_POOL = new ethers.Contract(
     YFL_POOL_0_ADDR,
-    Y_STAKING_POOL_ABI,
+    SYNTHETIX_STAKING_ABI,
     App.provider
   )
   const LINK_TOKEN = new ethers.Contract(

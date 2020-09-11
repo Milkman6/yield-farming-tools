@@ -1,4 +1,4 @@
-import { ERC20_ABI, Y_STAKING_POOL_ABI } from '../../../data/constants'
+import { ERC20_ABI, SYNTHETIX_STAKING_ABI } from '../../../data/constants'
 import {
   BAL_TOKEN,
   BAT_TOKEN,
@@ -34,9 +34,9 @@ const poolData: PoolData = {
 }
 
 export const yfiPool = async (App) => {
-  const stakingPool: TokenData = {
+  const stakingPool = {
     address: '0x70b83A7f5E83B3698d136887253E0bf426C9A117',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0x742569fd5266486fd2a50171dbdc88B8Ee893ee9',
@@ -67,7 +67,7 @@ export const yfiPool = async (App) => {
 export const balPool = async (App) => {
   const stakingPool: TokenData = {
     address: '0x62a9fE913eb596C8faC0936fd2F51064022ba22e',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0xc19e3035a4f6f69b981c7dc2f533e862aa3af496',
@@ -98,7 +98,7 @@ export const balPool = async (App) => {
 export const batPool = async (App) => {
   const stakingPool: TokenData = {
     address: '0x1c990fc37f399c935625b815975d0c9fad5c31a1',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0x471eb7dcf6647abaf838a5aad94940ce6932198c',
@@ -129,7 +129,7 @@ export const batPool = async (App) => {
 export const renPool = async (App) => {
   const stakingPool: TokenData = {
     address: '0x752037bfef024bd2669227bf9068cb22840174b0',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0x433d0c33288b985cf232a7e312bcfafd372460a8',
@@ -160,7 +160,7 @@ export const renPool = async (App) => {
 export const kncPool = async (App) => {
   const stakingPool: TokenData = {
     address: '0x9b74774f55C0351fD064CfdfFd35dB002C433092',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0xbfdef139103033990082245c24ff4b23dafd88cf',
@@ -191,7 +191,7 @@ export const kncPool = async (App) => {
 export const wethPool = async (App) => {
   const stakingPool: TokenData = {
     address: '0x67FfB615EAEb8aA88fF37cCa6A32e322286a42bb',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0x10dd17ecfc86101eab956e0a443cab3e9c62d9b4',
@@ -222,7 +222,7 @@ export const wethPool = async (App) => {
 export const linkPool = async (App) => {
   const stakingPool: TokenData = {
     address: '0x196cf719251579cbc850ded0e47e972b3d7810cd',
-    ABI: Y_STAKING_POOL_ABI,
+    ABI: SYNTHETIX_STAKING_ABI,
   }
   const balPoolToken: TokenData = {
     address: '0x4b0b0bf60abbf79a2fd028e4d52ac393982488ce',

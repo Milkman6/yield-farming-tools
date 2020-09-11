@@ -37,7 +37,7 @@ export type RiskProfile = {
 export type PoolData = {
   provider: string
   name: string
-  links: Array<Object>
+  links: Array<any>
   added: string
   risk?: RiskProfile
   logo?: string

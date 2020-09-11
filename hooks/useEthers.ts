@@ -67,6 +67,7 @@ export async function connectToWeb3() {
   }
 
   localStorage.setItem('addr', App.YOUR_ADDRESS)
+  global.App = App
   return App
 }
 
@@ -92,6 +93,7 @@ export async function initInfura(address?: string) {
   }
 
   localStorage.setItem('addr', App.YOUR_ADDRESS)
+  global.App = App
   return App
 }
 
@@ -109,6 +111,7 @@ export async function initInfuraServer() {
     throw 'Could not initialize your address. Make sure your address is checksum valid.'
   }
 
+  global.App = App
   return App
 }
 

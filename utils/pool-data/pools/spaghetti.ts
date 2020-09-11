@@ -1,7 +1,7 @@
 import {
   ERC20_ABI,
   YFFI_REWARD_CONTRACT_ABI,
-  Y_STAKING_POOL_ABI,
+  SYNTHETIX_STAKING_ABI,
 } from '../../../data/constants'
 import { getSnxBasedStakingData } from '../../pool-templates/staking'
 import {
@@ -42,7 +42,7 @@ const poolData: PoolData = {
 
 const yfiStakingPool: TokenData = {
   address: '0x093430541975e7aa0b2D9De2085BF99F33a5e91C',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaYfiPool = async (App) =>
   await getSnxBasedStakingData(
@@ -55,7 +55,7 @@ export const pastaYfiPool = async (App) =>
 
 const compStakingPool: TokenData = {
   address: '0x31A5F7a7a12af1A317491b1285C59E63e16654A1',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaCompPool = async (App) =>
   await getSnxBasedStakingData(
@@ -68,7 +68,7 @@ export const pastaCompPool = async (App) =>
 
 const lendStakingPool: TokenData = {
   address: '0xc98161569F57bE86D4D22B5b3228718F9F7101ad',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaLendPool = async (App) =>
   await getSnxBasedStakingData(
@@ -81,7 +81,7 @@ export const pastaLendPool = async (App) =>
 
 const linkStakingPool: TokenData = {
   address: '0xF774584b6d12A3F93bD7b5FC20A44549cc5e2f07',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaLinkPool = async (App) =>
   await getSnxBasedStakingData(
@@ -94,7 +94,7 @@ export const pastaLinkPool = async (App) =>
 
 const mkrStakingPool: TokenData = {
   address: '0x6a3F3e76ad1EE05f5382D79F9047eFfD8417670c',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaMkrPool = async (App) =>
   await getSnxBasedStakingData(
@@ -107,7 +107,7 @@ export const pastaMkrPool = async (App) =>
 
 const snxStakingPool: TokenData = {
   address: '0xF3a68aA38d8f54AFaAD90CD98E71e88eCc021E23',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaSnxPool = async (App) =>
   await getSnxBasedStakingData(
@@ -120,7 +120,7 @@ export const pastaSnxPool = async (App) =>
 
 const wethStakingPool: TokenData = {
   address: '0x4547a86cA6a84b9D60DC57aF908472074DE7af5F',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaWethPool = async (App) =>
   await getSnxBasedStakingData(
@@ -133,7 +133,7 @@ export const pastaWethPool = async (App) =>
 
 const wbtcStakingPool: TokenData = {
   address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
-  ABI: Y_STAKING_POOL_ABI,
+  ABI: SYNTHETIX_STAKING_ABI,
 }
 export const pastaWbtcPool = async (App) =>
   await getSnxBasedStakingData(

@@ -3,7 +3,7 @@ import {
   ERC20_ABI,
   YCRV_TOKEN_ADDR,
   YFFI_POOL_1_ADDR,
-  Y_STAKING_POOL_ABI,
+  SYNTHETIX_STAKING_ABI,
 } from '../../../../data/constants'
 import { priceLookupService } from '../../../../services/price-lookup-service'
 import { RiskLevel } from '../../../../types'
@@ -12,7 +12,7 @@ import { get_synth_weekly_rewards, toDollar, toFixed } from '../../../utils'
 export default async function main(App) {
   const Y_STAKING_POOL = new ethers.Contract(
     YFFI_POOL_1_ADDR,
-    Y_STAKING_POOL_ABI,
+    SYNTHETIX_STAKING_ABI,
     App.provider
   )
 

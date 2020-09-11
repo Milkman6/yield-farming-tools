@@ -28,7 +28,7 @@ export const YCRV_TOKEN: TokenData = {
   ticker: 'yCRV',
   tokenId: 'curve-fi-ydai-yusdc-yusdt-ytusd',
 }
-
+//revisit
 export const YYCRV_TOKEN: TokenData = {
   address: '0x5dbcf33d8c2e976c6b560249878e6f1491bca25c',
   ABI: ERC20_ABI,
@@ -43,6 +43,7 @@ export const YAM_TOKEN: TokenData = {
   tokenId: 'yam',
 }
 
+//disable
 export const YAM_CLASSIC_TOKEN: TokenData = {
   address: YAM_CLASSIC_ADDR,
   ABI: YAM_TOKEN_ABI,
@@ -76,7 +77,7 @@ export const LINK_TOKEN: TokenData = {
   ticker: 'LINK',
   tokenId: 'chainlink',
 }
-
+// revisit
 export const ALINK_TOKEN: TokenData = {
   address: ALINK_TOKEN_ADDR,
   ABI: ERC20_ABI,
@@ -118,7 +119,7 @@ export const CREAM_TOKEN: TokenData = {
   ticker: 'CREAM',
   tokenId: 'cream-2',
 }
-
+// skip
 export const DICE_TOKEN: TokenData = {
   address: DICE_TOKEN_ADDR,
   ABI: ERC20_ABI,
@@ -145,6 +146,7 @@ export const BASED_TOKEN: TokenData = {
   ticker: 'BASED',
   tokenId: 'based-money',
 }
+//skip
 export const ZOMBIE_TOKEN: TokenData = {
   address: '0xd55BD2C12B30075b325Bc35aEf0B46363B3818f8',
   ABI: ERC20_ABI,
