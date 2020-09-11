@@ -7,8 +7,12 @@ import {
   UNISWAP_SXAU_USDC_POOL_ABI,
   UNISWAP_SXAU_USDC_POOL_ADDR,
   USDC_TOKEN_ADDR,
-} from '../../../../data/constants'
-import { get_synth_weekly_rewards, lookUpPrices, toFixed } from '../../../utils'
+} from '../../../../../data/constants'
+import {
+  get_synth_weekly_rewards,
+  lookUpPrices,
+  toFixed,
+} from '../../../../utils'
 
 export default async function main(App) {
   const SYNTH_UNIV2_SXAU_USDC_STAKING_POOL = new ethers.Contract(

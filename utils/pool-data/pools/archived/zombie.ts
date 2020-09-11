@@ -2,11 +2,15 @@ import {
   ERC20_ABI,
   YFFI_REWARD_CONTRACT_ABI,
   SYNTHETIX_STAKING_ABI,
-} from '../../../data/constants'
-import { DAI_TOKEN, SHRIMP_TOKEN, ZOMBIE_TOKEN } from '../../../data/token-data'
-import { PoolData, RiskLevel, TokenData } from '../../../types'
-import { getSnxBasedStakingData } from '../../pool-templates/staking'
-import { getSnxBasedUniPoolStakingData } from '../../pool-templates/uniswap-staking'
+} from '../../../../data/constants'
+import {
+  DAI_TOKEN,
+  SHRIMP_TOKEN,
+  ZOMBIE_TOKEN,
+} from '../../../../data/token-data'
+import { PoolData, RiskLevel, TokenData } from '../../../../types'
+import { getSnxBasedStakingData } from '../../../pool-templates/staking'
+import { getSnxBasedUniPoolStakingData } from '../../../pool-templates/uniswap-staking'
 
 const poolData: PoolData = {
   provider: 'Zombie',

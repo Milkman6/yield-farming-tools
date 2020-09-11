@@ -3,8 +3,8 @@ import {
   YAM_YCRV_UNI_TOKEN_ADDR,
   YFFI_REWARD_CONTRACT_ABI,
   SYNTHETIX_STAKING_ABI,
-} from '../../../data/constants'
-import { getSnxBasedStakingData } from '../../pool-templates/staking'
+} from '../../../../data/constants'
+import { getSnxBasedStakingData } from '../../../pool-templates/staking'
 import {
   COMP_TOKEN,
   LEND_TOKEN,
@@ -15,12 +15,12 @@ import {
   YAM_TOKEN,
   YCRV_TOKEN,
   YFI_TOKEN,
-} from '../../../data/token-data'
-import { getSnxBasedUniPoolStakingData } from '../../pool-templates/uniswap-staking'
-import { PoolData, RiskLevel, TokenData } from '../../../types'
-import { Tokens } from '../../../data/TokenManager'
-import { getSnxBasedBalPool } from '../../pool-templates/balancer-staking'
-import { StakingPool, PoolToken } from '../../../data/token'
+} from '../../../../data/token-data'
+import { getSnxBasedUniPoolStakingData } from '../../../pool-templates/uniswap-staking'
+import { PoolData, RiskLevel, TokenData } from '../../../../types'
+import { Tokens } from '../../../../data/TokenManager'
+import { getSnxBasedBalPool } from '../../../pool-templates/balancer-staking'
+import { StakingPool, PoolToken } from '../../../../data/token'
 
 const poolData: PoolData = {
   provider: 'yam.finance',

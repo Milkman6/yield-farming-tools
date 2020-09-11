@@ -1,12 +1,12 @@
 import { ethers } from 'ethers'
-import * as Constant from '../../../../data/constants'
-import { RiskLevel } from '../../../../types'
+import * as Constant from '../../../../../data/constants'
+import { RiskLevel } from '../../../../../types'
 import {
   get_synth_weekly_rewards,
   lookUpPrices,
   toDollar,
   toFixed,
-} from '../../../utils'
+} from '../../../../utils'
 
 export default async function main(App) {
   const CURVE_SUSD_POOL = new ethers.Contract(

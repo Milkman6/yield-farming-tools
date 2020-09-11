@@ -6,8 +6,12 @@ import {
   SYNTH_UNIV1_SETH_STAKING_POOL_ADDR,
   UNISWAP_SETH_ETH_POOL_ABI,
   UNISWAP_SETH_ETH_POOL_ADDR,
-} from '../../../../data/constants'
-import { get_synth_weekly_rewards, lookUpPrices, toFixed } from '../../../utils'
+} from '../../../../../data/constants'
+import {
+  get_synth_weekly_rewards,
+  lookUpPrices,
+  toFixed,
+} from '../../../../utils'
 
 export default async function main(App) {
   const SYNTH_UNIV1_SETH_STAKING_POOL = new ethers.Contract(
