@@ -1,85 +1,41 @@
-import { ethers } from 'ethers'
-import { priceLookupService } from '../../services/price-lookup-service'
-import { PoolData, TokenData } from '../../types'
-import { toDollar, toFixed } from '../utils'
+import { PoolToken, StakingPool, Token } from '../../data/token'
+import { toFixed } from '../utils'
+
+type RequiredTokens = {
+  stakingPool: StakingPool
+  liquidityPool: PoolToken
+  rewardToken: Token
+}
 
 export async function getSushiPoolData(
-  App,
-  poolToken1: TokenData,
-  rewardToken: TokenData,
-  uniPoolToken: TokenData,
-  rewardStakingPool: TokenData,
-  poolData: PoolData,
-  poolToken2: TokenData,
-  poolId
+  { stakingPool, liquidityPool, rewardToken }: RequiredTokens,
+  poolId: number,
+  poolData
 ) {
-  const REWARD_POOL = new ethers.Contract(
-    rewardStakingPool.address,
-    rewardStakingPool.ABI,
-    App.provider
-  )
+  const poolToken1 = liquidityPool.poolToken1
+  const poolToken2 = liquidityPool.poolToken2
 
-  const UNI_POOL = new ethers.Contract(
-    uniPoolToken.address,
-    uniPoolToken.ABI,
-    App.provider
-  )
-
-  const POOL_TOKEN_1 = new ethers.Contract(
-    poolToken1.address,
-    poolToken1.ABI,
-    App.provider
-  )
-
-  const POOL_TOKEN_2 = new ethers.Contract(
-    poolToken2.address,
-    poolToken2.ABI,
-    App.provider
-  )
-  const multiplier = await REWARD_POOL.BONUS_MULTIPLIER()
-  const poolInfo = await REWARD_POOL.poolInfo(poolId)
+  const multiplier = await stakingPool.BONUS_MULTIPLIER()
+  const poolInfo = await stakingPool.poolInfo(poolId)
   const rewardPerBlock = parseInt(poolInfo.allocPoint)
 
   const weeklyReward = rewardPerBlock * (604800 / 30)
 
-  let totalTokenOneInUniPool =
-    (await POOL_TOKEN_1.balanceOf(uniPoolToken.address)) /
-    (poolToken1?.numBase || 1e18)
-    
+  const totalStakedLiqTokens = await liquidityPool.getBalance(
+    stakingPool.address
+  )
+  const userInfo = await stakingPool.userInfo(poolId, global.App.YOUR_ADDRESS)
 
-  const totalEthInUniPool =
-    (await POOL_TOKEN_2.balanceOf(uniPoolToken.address)) / 1e18
+  const yourStakedTokens = userInfo.amount / 1e18
 
-  const totalStaked =
-    (await UNI_POOL.balanceOf(rewardStakingPool.address)) / 1e18
+  const yourEarnedRewards =
+    (await stakingPool.pendingSushi(poolId, global.App.YOUR_ADDRESS)) / 1e18
 
-  const userInfo = await REWARD_POOL.userInfo(poolId, App.YOUR_ADDRESS)
-
-  const myStakedAmount = userInfo.amount / 1e18
-
-  const totalSupplyOfStakingToken = (await UNI_POOL.totalSupply()) / 1e18
-
-  const myRewards =
-    (await REWARD_POOL.pendingSushi(poolId, App.YOUR_ADDRESS)) / 1e18
-
-  const rewardPerToken = weeklyReward / totalStaked
-
-  const {
-    [rewardToken.tokenId]: rewardTokenPrice,
-    [poolToken1.tokenId]: token1Price,
-    [poolToken2.tokenId]: token2Price,
-  } = await priceLookupService.getPrices([
-    rewardToken.tokenId,
-    poolToken1.tokenId,
-    poolToken2.tokenId,
-  ])
-
-  const stakingTokenPrice =
-    (totalEthInUniPool * token2Price + totalTokenOneInUniPool * token1Price) /
-    totalSupplyOfStakingToken
+  const rewardPerToken = weeklyReward / totalStakedLiqTokens
 
   let weeklyRoi =
-    (rewardPerToken * rewardTokenPrice * multiplier) / stakingTokenPrice
+    (rewardPerToken * (await rewardToken.getPrice()) * multiplier) /
+    (await liquidityPool.getPrice())
 
   return {
     provider: poolData.provider,
@@ -87,40 +43,40 @@ export async function getSushiPoolData(
     poolRewards: [rewardToken.ticker],
     links: poolData.links,
     risk: poolData.risk,
-    apr: toFixed(weeklyRoi * 52, 4),
+    apr: weeklyRoi * 52,
     prices: [
-      { label: poolToken1.ticker, value: toDollar(token1Price) },
-      { label: poolToken2.ticker, value: toDollar(token2Price) },
-      { label: rewardToken.ticker, value: toDollar(rewardTokenPrice) },
+      { label: poolToken1.ticker, value: poolToken1.price },
+      { label: poolToken2.ticker, value: poolToken2.price },
+      { label: rewardToken.ticker, value: liquidityPool.price },
     ],
     staking: [
       {
         label: 'Pool Total',
-        value: toDollar(totalStaked * stakingTokenPrice),
+        value: totalStakedLiqTokens * liquidityPool.price,
       },
       {
         label: 'Your Total',
-        value: toDollar(myStakedAmount * stakingTokenPrice),
+        value: yourStakedTokens * liquidityPool.price,
       },
     ],
     rewards: [
       {
-        label: `${toFixed(myRewards, 4)} ${rewardToken.ticker}`,
-        value: toDollar(myRewards * rewardTokenPrice),
+        label: `${toFixed(yourEarnedRewards, 4)} ${rewardToken.ticker}`,
+        value: yourEarnedRewards * rewardToken.price,
       },
     ],
     ROIs: [
       {
         label: 'Hourly',
-        value: `${toFixed(weeklyRoi / 7 / 24, 4)}%`,
+        value: weeklyRoi / 7 / 24,
       },
       {
         label: 'Daily',
-        value: `${toFixed(weeklyRoi / 7, 4)}%`,
+        value: weeklyRoi / 7,
       },
       {
         label: 'Weekly',
-        value: `${toFixed(weeklyRoi, 4)}%`,
+        value: weeklyRoi,
       },
     ],
   }

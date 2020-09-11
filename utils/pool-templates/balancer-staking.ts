@@ -35,11 +35,7 @@ export async function getSnxBasedBalPool(
   const weeklyRoi =
     (rewardPerToken * (await rewardToken.getPrice()) * 100) /
     (await liquidityPool.getPrice())
-  console.log(
-    rewardPerToken,
-    await rewardToken.getPrice(),
-    await liquidityPool.getPrice()
-  )
+
   console.log('6', weeklyRoi)
 
   const priceData = [

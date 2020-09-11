@@ -67,6 +67,7 @@ export async function connectToWeb3() {
   }
 
   localStorage.setItem('addr', App.YOUR_ADDRESS)
+  App.metamask = true
   global.App = App
   return App
 }
@@ -85,6 +86,7 @@ export async function initInfura(address?: string) {
       App.YOUR_ADDRESS = localStorage.getItem('addr')
     } else {
       App.YOUR_ADDRESS = Constants.PLACEHOLDER_ADDRESS
+      App.isAnon = true
     }
   }
 
@@ -106,6 +108,7 @@ export async function initInfuraServer() {
   sleep(10)
 
   App.YOUR_ADDRESS = Constants.PLACEHOLDER_ADDRESS
+  App.isAnon = true
 
   if (!App.YOUR_ADDRESS || !ethers.utils.isAddress(App.YOUR_ADDRESS)) {
     throw 'Could not initialize your address. Make sure your address is checksum valid.'

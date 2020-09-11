@@ -18,6 +18,9 @@ import {
 } from '../../../data/token-data'
 import { getSnxBasedUniPoolStakingData } from '../../pool-templates/uniswap-staking'
 import { PoolData, RiskLevel, TokenData } from '../../../types'
+import { Tokens } from '../../../data/TokenManager'
+import { getSnxBasedBalPool } from '../../pool-templates/balancer-staking'
+import { StakingPool, PoolToken } from '../../../data/token'
 
 const poolData: PoolData = {
   provider: 'yam.finance',
@@ -39,106 +42,96 @@ const poolData: PoolData = {
   ],
 }
 
-const yfiStakingPool: TokenData = {
-  address: '0xc5B6488c7D5BeD173B76Bd5DCA712f45fB9EaEaB',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamYfiPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    YFI_TOKEN,
-    YAM_TOKEN,
-    yfiStakingPool,
-    poolData
-  )
+// const yfiStakingPool: TokenData = {
+//   address: '0xc5B6488c7D5BeD173B76Bd5DCA712f45fB9EaEaB',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamYfiPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     YFI_TOKEN,
+//     YAM_TOKEN,
+//     yfiStakingPool,
+//     poolData
+//   )
 
-const compStakingPool: TokenData = {
-  address: '0x8538E5910c6F80419CD3170c26073Ff238048c9E',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamCompPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    COMP_TOKEN,
-    YAM_TOKEN,
-    compStakingPool,
-    poolData
-  )
+// const compStakingPool: TokenData = {
+//   address: '0x8538E5910c6F80419CD3170c26073Ff238048c9E',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamCompPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     COMP_TOKEN,
+//     YAM_TOKEN,
+//     compStakingPool,
+//     poolData
+//   )
 
-const lendStakingPool: TokenData = {
-  address: '0x6009A344C7F993B16EBa2c673fefd2e07f9be5FD',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamLendPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    LEND_TOKEN,
-    YAM_TOKEN,
-    lendStakingPool,
-    poolData
-  )
+// const lendStakingPool: TokenData = {
+//   address: '0x6009A344C7F993B16EBa2c673fefd2e07f9be5FD',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamLendPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     LEND_TOKEN,
+//     YAM_TOKEN,
+//     lendStakingPool,
+//     poolData
+//   )
 
-const linkStakingPool: TokenData = {
-  address: '0xFDC28897A1E32B595f1f4f1D3aE0Df93B1eee452',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamLinkPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    LINK_TOKEN,
-    YAM_TOKEN,
-    linkStakingPool,
-    poolData
-  )
+// const linkStakingPool: TokenData = {
+//   address: '0xFDC28897A1E32B595f1f4f1D3aE0Df93B1eee452',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamLinkPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     LINK_TOKEN,
+//     YAM_TOKEN,
+//     linkStakingPool,
+//     poolData
+//   )
 
-const mkrStakingPool: TokenData = {
-  address: '0xcFe1E539AcB2D489a651cA011a6eB93d32f97E23',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamMkrPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    MKR_TOKEN,
-    YAM_TOKEN,
-    mkrStakingPool,
-    poolData
-  )
+// const mkrStakingPool: TokenData = {
+//   address: '0xcFe1E539AcB2D489a651cA011a6eB93d32f97E23',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamMkrPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     MKR_TOKEN,
+//     YAM_TOKEN,
+//     mkrStakingPool,
+//     poolData
+//   )
 
-const snxStakingPool: TokenData = {
-  address: '0x6c3FC1FFDb14D92394f40eeC91D9Ce8B807f132D',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamSnxPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    SNX_TOKEN,
-    YAM_TOKEN,
-    snxStakingPool,
-    poolData
-  )
+// const snxStakingPool: TokenData = {
+//   address: '0x6c3FC1FFDb14D92394f40eeC91D9Ce8B807f132D',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamSnxPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     SNX_TOKEN,
+//     YAM_TOKEN,
+//     snxStakingPool,
+//     poolData
+//   )
 
-const wethStakingPool: TokenData = {
-  address: '0x587A07cE5c265A38Dd6d42def1566BA73eeb06F5',
-  ABI: SYNTHETIX_STAKING_ABI,
-}
-export const yamWethPool = async (App) =>
-  await getSnxBasedStakingData(
-    App,
-    WETH_TOKEN,
-    YAM_TOKEN,
-    wethStakingPool,
-    poolData
-  )
-
-const uniTokenStakingPool: TokenData = {
-  address: '0xADDBCd6A68BFeb6E312e82B30cE1EB4a54497F4c',
-  ABI: YFFI_REWARD_CONTRACT_ABI,
-}
-const yamYcrvPoolToken: TokenData = {
-  address: YAM_YCRV_UNI_TOKEN_ADDR,
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
-}
+// const wethStakingPool: TokenData = {
+//   address: '0x587A07cE5c265A38Dd6d42def1566BA73eeb06F5',
+//   ABI: SYNTHETIX_STAKING_ABI,
+// }
+// export const yamWethPool = async (App) =>
+//   await getSnxBasedStakingData(
+//     App,
+//     WETH_TOKEN,
+//     YAM_TOKEN,
+//     wethStakingPool,
+//     poolData
+//   )
 
 const yCrvPoolData = Object.assign({}, poolData, {
   risk: {
@@ -155,12 +148,42 @@ const yCrvPoolData = Object.assign({}, poolData, {
   ],
 })
 
-export const yamYcrvPool = async (App) =>
-  await getSnxBasedUniPoolStakingData(
-    App,
-    YCRV_TOKEN,
-    YAM_TOKEN,
-    yamYcrvPoolToken,
-    uniTokenStakingPool,
+export const yamYcrvPool = async (tokens: Tokens) => {
+  const stakingPool = new StakingPool({
+    address: '0xADDBCd6A68BFeb6E312e82B30cE1EB4a54497F4c',
+    ABI: YFFI_REWARD_CONTRACT_ABI,
+  })
+
+  const liquidityPool = new PoolToken(
+    {
+      address: YAM_YCRV_UNI_TOKEN_ADDR,
+      ABI: ERC20_ABI,
+      ticker: 'UNIV2',
+    },
+    {
+      poolToken1: tokens.yam,
+      poolToken2: tokens.ycrv,
+    }
+  )
+
+  const data = await getSnxBasedBalPool(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.yam,
+    },
     yCrvPoolData
   )
+  console.log(data)
+
+  return data
+}
+
+// await getSnxBasedUniPoolStakingData(
+//   App,
+//   YCRV_TOKEN,
+//   YAM_TOKEN,
+//   yamYcrvPoolToken,
+//   uniTokenStakingPool,
+//   yCrvPoolData
+// )

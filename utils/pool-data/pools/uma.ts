@@ -1,30 +1,30 @@
 import { ethers } from 'ethers'
 import {
+  YUSD_USDC_BPT_TOKEN_ADDR,
   BALANCER_POOL_ABI,
   ERC20_ABI,
-  USDC_TOKEN_ADDR,
   YUSDSEP20_TOKEN_ADDR,
-  YUSD_USDC_BPT_TOKEN_ADDR,
-} from '../../../../data/constants'
-import { priceLookupService } from '../../../../services/price-lookup-service'
-import { toDollar, toFixed } from '../../../utils'
-import { RiskLevel } from '../../../../types'
+  USDC_TOKEN_ADDR,
+} from '../../../data/constants'
+import { priceLookupService } from '../../../services/price-lookup-service'
+import { RiskLevel } from '../../../types'
+import { toFixed } from '../../utils'
 
-export default async function main(App) {
+export async function yusdUsdc() {
   const YUSD_USDC_BALANCER_POOL = new ethers.Contract(
     YUSD_USDC_BPT_TOKEN_ADDR,
     BALANCER_POOL_ABI,
-    App.provider
+    global.App.provider
   )
   const YUSD_USDC_BPT_TOKEN = new ethers.Contract(
     YUSD_USDC_BPT_TOKEN_ADDR,
     ERC20_ABI,
-    App.provider
+    global.App.provider
   )
 
   const totalBPTAmount = (await YUSD_USDC_BALANCER_POOL.totalSupply()) / 1e18
   const yourBPTAmount =
-    (await YUSD_USDC_BPT_TOKEN.balanceOf(App.YOUR_ADDRESS)) / 1e18
+    (await YUSD_USDC_BPT_TOKEN.balanceOf(global.App.YOUR_ADDRESS)) / 1e18
 
   const totalYUSDSEP20Amount =
     (await YUSD_USDC_BALANCER_POOL.getBalance(YUSDSEP20_TOKEN_ADDR)) / 1e18
@@ -63,40 +63,40 @@ export default async function main(App) {
       smartContract: RiskLevel.LOW,
       impermanentLoss: RiskLevel.LOW,
     },
-    apr: toFixed(UMAWeeklyROI * 52, 4),
+    apr: UMAWeeklyROI * 52,
     prices: [
-      { label: 'UMA', value: toDollar(UMAPrice) },
-      { label: 'yUSD-OCT20', value: toDollar(YUSDSEP20Price) },
-      { label: 'BPT', value: toDollar(BPTPrice) },
+      { label: 'UMA', value: UMAPrice },
+      { label: 'yUSD-OCT20', value: YUSDSEP20Price },
+      { label: 'BPT', value: BPTPrice },
     ],
     staking: [
       {
         label: 'Pool Total',
-        value: toDollar(totalBPTAmount * BPTPrice),
+        value: totalBPTAmount * BPTPrice,
       },
       {
         label: 'Your Total',
-        value: toDollar(yourBPTAmount * BPTPrice),
+        value: yourBPTAmount * BPTPrice,
       },
     ],
     rewards: [
       {
         label: `${toFixed(UMARewardPerBPT * yourBPTAmount, 2)} UMA`,
-        value: toDollar(UMARewardPerBPT * yourBPTAmount * UMAPrice),
+        value: UMARewardPerBPT * yourBPTAmount * UMAPrice,
       },
     ],
     ROIs: [
       {
         label: 'Hourly',
-        value: `${toFixed(UMAWeeklyROI / 7 / 24, 4)}%`,
+        value: UMAWeeklyROI / 7 / 24,
       },
       {
         label: 'Daily',
-        value: `${toFixed(UMAWeeklyROI / 7, 4)}%`,
+        value: UMAWeeklyROI / 7,
       },
       {
         label: 'Weekly',
-        value: `${toFixed(UMAWeeklyROI, 4)}%`,
+        value: UMAWeeklyROI,
       },
     ],
     links: [

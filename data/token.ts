@@ -58,6 +58,9 @@ export class Token extends ethers.Contract {
   }
 
   public async getBalance(address: string) {
+    if (address === global.App.YOUR_ADDRESS && global.App.isAnon) {
+      return 0
+    }
     const balance = (await this.balanceOf(address)) / this.numBase
     return balance
   }
@@ -157,6 +160,9 @@ export class StakingPool extends Token {
     super(stakingPoolProps)
   }
   public async getMyRewards() {
+    if (global.App.isAnon) {
+      return 0
+    }
     const rewards = (await this.earned(global.App.YOUR_ADDRESS)) / 1e18
     return rewards
   }

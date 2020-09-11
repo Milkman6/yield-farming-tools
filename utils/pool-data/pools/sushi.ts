@@ -1,34 +1,15 @@
-import { ERC20_ABI, MASTER_CHEF_ABI } from '../../../data/constants'
-import { PoolData, RiskLevel, TokenData } from '../../../types'
+import { MASTER_CHEF_ABI } from '../../../data/constants'
+import { PoolToken, StakingPool } from '../../../data/token'
+import { Tokens } from '../../../data/TokenManager'
+import { PoolData, RiskLevel } from '../../../types'
 import { getSushiPoolData } from '../../pool-templates/sushi-based'
-import {
-  AMPL_TOKEN,
-  BAND_TOKEN,
-  COMP_TOKEN,
-  DAI_TOKEN,
-  LEND_TOKEN,
-  LINK_TOKEN,
-  SNX_TOKEN,
-  SUSD_TOKEN,
-  SUSHI_TOKEN,
-  TETHER_TOKEN,
-  UMA_TOKEN,
-  USDC_TOKEN,
-  WETH_TOKEN,
-  YFI_TOKEN,
-  SERUM_TOKEN,
-  YAMV2_TOKEN,
-  REN_TOKEN,
-  CRV_TOKEN,
-  BASED_TOKEN,
-} from '../../../data/token-data'
 
 const poolData: PoolData = {
   provider: 'Sushi',
-  name: 'Uni',
+  name: 'Sushi',
   added: '2020-08-28 22:50:58',
   risk: {
-    smartContract: RiskLevel.LOW,
+    smartContract: RiskLevel.MEDIUM,
     impermanentLoss: RiskLevel.HIGH,
   },
   links: [
@@ -43,548 +24,616 @@ const poolData: PoolData = {
   ],
 }
 
-const masterChefStakingPool: TokenData = {
+const stakingPool = new StakingPool({
   address: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
   ABI: MASTER_CHEF_ABI,
-}
-
-// UMA-ETH
-const ethUmaPoolId = 7
-const ethUmaPoolToken: TokenData = {
-  address: '0x88D97d199b9ED37C29D846d00D443De980832a22',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
-}
-const ethUmaPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
-    {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0x88d97d199b9ed37c29d846d00d443de980832a22',
-    },
-  ],
 })
 
-export const umaEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    UMA_TOKEN,
-    SUSHI_TOKEN,
-    ethUmaPoolToken,
-    masterChefStakingPool,
-    ethUmaPoolData,
-    WETH_TOKEN,
-    ethUmaPoolId
-  )
-
-//BAND-ETH
-const ethBandPoolId = 9
-const ethBandPoolToken: TokenData = {
-  address: '0xf421c3f2e695C2D4C0765379cCace8adE4a480D9',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
-}
-const ethBandPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+export const umaEthPool = async (tokens: Tokens) => {
+  const poolId = 7
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xf421c3f2e695c2d4c0765379ccace8ade4a480d9',
+      address: '0x001b6450083E531A5a7Bf310BD2c1Af4247E23D4',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const bandEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    BAND_TOKEN,
-    SUSHI_TOKEN,
-    ethBandPoolToken,
-    masterChefStakingPool,
-    ethBandPoolData,
-    WETH_TOKEN,
-    ethBandPoolId
-  )
-
-//SNX-ETH
-const ethSnxPoolId = 6
-const ethSnxPoolToken: TokenData = {
-  address: '0x43AE24960e5534731Fc831386c07755A2dc33D47',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
-}
-const ethSnxPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0x43ae24960e5534731fc831386c07755a2dc33d47',
-    },
-  ],
-})
-
-export const snxEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    SNX_TOKEN,
-    SUSHI_TOKEN,
-    ethSnxPoolToken,
-    masterChefStakingPool,
-    ethSnxPoolData,
-    WETH_TOKEN,
-    ethSnxPoolId
+      poolToken1: tokens.weth,
+      poolToken2: tokens.uma,
+    }
   )
-
-//SUSHI-ETH
-const ethSushiPoolId = 12
-const ethSushiPoolToken: TokenData = {
-  address: '0xCE84867c3c02B05dc570d0135103d3fB9CC19433',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
-}
-const ethSushiPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+  const ethUmaPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x001b6450083E531A5a7Bf310BD2c1Af4247E23D4',
+      },
+    ],
+  })
+  return await getSushiPoolData(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xce84867c3c02b05dc570d0135103d3fb9cc19433',
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
     },
-  ],
-})
-
-export const sushiEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    SUSHI_TOKEN,
-    SUSHI_TOKEN,
-    ethSushiPoolToken,
-    masterChefStakingPool,
-    ethSushiPoolData,
-    WETH_TOKEN,
-    ethSushiPoolId
+    poolId,
+    ethUmaPoolData
   )
-
-//LEND-ETH
-const ethLendPoolId = 5
-const ethLendPoolToken: TokenData = {
-  address: '0xaB3F9bF1D81ddb224a2014e98B238638824bCf20',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
 }
-const ethLendPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const bandEthPool = async (tokens: Tokens) => {
+  const poolId = 9
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xab3f9bf1d81ddb224a2014e98b238638824bcf20',
+      address: '0xA75F7c2F025f470355515482BdE9EFA8153536A8',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const lendEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    LEND_TOKEN,
-    SUSHI_TOKEN,
-    ethLendPoolToken,
-    masterChefStakingPool,
-    ethLendPoolData,
-    WETH_TOKEN,
-    ethLendPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.band,
+    }
   )
-
-//YFI-ETH
-const ethYfiPoolId = 11
-const ethYfiPoolToken: TokenData = {
-  address: '0x2fDbAdf3C4D5A8666Bc06645B8358ab803996E28',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethBandPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0xA75F7c2F025f470355515482BdE9EFA8153536A8',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethBandPoolData
+  )
 }
-const ethYfiPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
-    {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0x2fdbadf3c4d5a8666bc06645b8358ab803996e28',
-    },
-  ],
-})
 
-export const yfiEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    YFI_TOKEN,
-    SUSHI_TOKEN,
-    ethYfiPoolToken,
-    masterChefStakingPool,
-    ethYfiPoolData,
-    WETH_TOKEN,
-    ethYfiPoolId
+export const snxEthPool = async (tokens: Tokens) => {
+  const poolId = 6
+  const liquidityPool = new PoolToken(
+    {
+      address: '0xA1d7b2d891e3A1f9ef4bBC5be20630C2FEB1c470',
+      ticker: 'SLP',
+    },
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.snx,
+    }
   )
 
-//TETHER-ETH
-const ethTetherPoolId = 0
-const ethTetherPoolToken: TokenData = {
-  address: '0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethSnxPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0xA1d7b2d891e3A1f9ef4bBC5be20630C2FEB1c470',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethSnxPoolData
+  )
 }
-const ethTetherPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const sushiEthPool = async (tokens: Tokens) => {
+  const poolId = 12
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852',
+      address: '0x795065dCc9f64b5614C407a6EFDC400DA6221FB0',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const tetherEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    TETHER_TOKEN,
-    SUSHI_TOKEN,
-    ethTetherPoolToken,
-    masterChefStakingPool,
-    ethTetherPoolData,
-    WETH_TOKEN,
-    ethTetherPoolId
+    {
+      poolToken1: tokens.sushi,
+      poolToken2: tokens.weth,
+    }
   )
-
-//AMPL-ETH
-const ethAmplPoolId = 10
-const ethAmplPoolToken: TokenData = {
-  address: '0xc5be99A02C6857f9Eac67BbCE58DF5572498F40c',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethSushiPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x795065dCc9f64b5614C407a6EFDC400DA6221FB0',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethSushiPoolData
+  )
 }
-const ethAmplPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const lendEthPool = async (tokens: Tokens) => {
+  const poolId = 5
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xc5be99a02c6857f9eac67bbce58df5572498f40c',
+      address: '0x5E63360E891BD60C69445970256C260b0A6A54c6',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const amplEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    AMPL_TOKEN,
-    SUSHI_TOKEN,
-    ethAmplPoolToken,
-    masterChefStakingPool,
-    ethAmplPoolData,
-    WETH_TOKEN,
-    ethAmplPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.lend,
+    }
   )
-
-//DAI-ETH
-const ethDaiPoolId = 2
-const ethDaiPoolToken: TokenData = {
-  address: '0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethLendPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x5E63360E891BD60C69445970256C260b0A6A54c6',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethLendPoolData
+  )
 }
-const ethDaiPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const yfiEthPool = async (tokens: Tokens) => {
+  const poolId = 11
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xa478c2975ab1ea89e8196811f51a7b7ade33eb11',
+      address: '0x088ee5007C98a9677165D78dD2109AE4a3D04d0C',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const daiEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    DAI_TOKEN,
-    SUSHI_TOKEN,
-    ethDaiPoolToken,
-    masterChefStakingPool,
-    ethDaiPoolData,
-    WETH_TOKEN,
-    ethDaiPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.yfi,
+    }
   )
+  const ethYfiPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x088ee5007C98a9677165D78dD2109AE4a3D04d0C',
+      },
+    ],
+  })
 
-//USDC-ETH
-const ethUsdcPoolId = 1
-const ethUsdcPoolToken: TokenData = {
-  address: '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethYfiPoolData
+  )
 }
-const ethUsdcPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const tetherEthPool = async (tokens: Tokens) => {
+  const poolId = 0
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc',
+      address: '0x06da0fd433C1A5d7a4faa01111c044910A184553',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const usdcEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    USDC_TOKEN,
-    SUSHI_TOKEN,
-    ethUsdcPoolToken,
-    masterChefStakingPool,
-    ethUsdcPoolData,
-    WETH_TOKEN,
-    ethUsdcPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.tether,
+    }
   )
+  const ethTetherPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x06da0fd433C1A5d7a4faa01111c044910A184553',
+      },
+    ],
+  })
 
-//LINK-ETH
-const ethLinkPoolId = 8
-const ethLinkPoolToken: TokenData = {
-  address: '0xa2107FA5B38d9bbd2C461D6EDf11B11A50F6b974',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethTetherPoolData
+  )
 }
-const ethLinkPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const amplEthPool = async (tokens: Tokens) => {
+  const poolId = 10
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974',
+      address: '0xCb2286d9471cc185281c4f763d34A962ED212962',
+
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const linkEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    LINK_TOKEN,
-    SUSHI_TOKEN,
-    ethLinkPoolToken,
-    masterChefStakingPool,
-    ethLinkPoolData,
-    WETH_TOKEN,
-    ethLinkPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.ampl,
+    }
   )
-
-//COMP-ETH
-const ethCompPoolId = 4
-const ethCompPoolToken: TokenData = {
-  address: '0xCFfDdeD873554F362Ac02f8Fb1f02E5ada10516f',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethAmplPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0xCb2286d9471cc185281c4f763d34A962ED212962',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethAmplPoolData
+  )
 }
-const ethCompPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const daiEthPool = async (tokens: Tokens) => {
+  const poolId = 2
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xcffdded873554f362ac02f8fb1f02e5ada10516f',
+      address: '0xC3D03e4F041Fd4cD388c549Ee2A29a9E5075882f',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const compEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    COMP_TOKEN,
-    SUSHI_TOKEN,
-    ethCompPoolToken,
-    masterChefStakingPool,
-    ethCompPoolData,
-    WETH_TOKEN,
-    ethCompPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.dai,
+    }
   )
-
-//SUSD-ETH
-const ethSusdPoolId = 3
-const ethSusdPoolToken: TokenData = {
-  address: '0xf80758aB42C3B07dA84053Fd88804bCB6BAA4b5c',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethDaiPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0xC3D03e4F041Fd4cD388c549Ee2A29a9E5075882f',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethDaiPoolData
+  )
 }
-const ethSusdPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const usdcEthPool = async (tokens: Tokens) => {
+  const poolId = 1
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xf80758ab42c3b07da84053fd88804bcb6baa4b5c',
+      address: '0x397FF1542f962076d0BFE58eA045FfA2d347ACa0',
+
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const susdEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    SUSD_TOKEN,
-    SUSHI_TOKEN,
-    ethSusdPoolToken,
-    masterChefStakingPool,
-    ethSusdPoolData,
-    WETH_TOKEN,
-    ethSusdPoolId
+    {
+      poolToken1: tokens.usdc,
+      poolToken2: tokens.weth,
+    }
   )
+  const ethUsdcPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x397FF1542f962076d0BFE58eA045FfA2d347ACa0',
+      },
+    ],
+  })
 
-//SRM-ETH
-const serumEthPoolId = 15
-const serumEthPoolToken: TokenData = {
-  address: '0xCc3d1EceF1F9fD25599dbeA2755019DC09db3c54',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethUsdcPoolData
+  )
 }
-const serumEthPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const linkEthPool = async (tokens: Tokens) => {
+  const poolId = 8
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xCc3d1EceF1F9fD25599dbeA2755019DC09db3c54',
+      address: '0xC40D16476380e4037e6b1A2594cAF6a6cc8Da967',
+
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const serumEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    SERUM_TOKEN,
-    SUSHI_TOKEN,
-    serumEthPoolToken,
-    masterChefStakingPool,
-    serumEthPoolData,
-    WETH_TOKEN,
-    serumEthPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.link,
+    }
   )
-
-// YAMv2-ETH
-const yamv2EthPoolId = 16
-const yamv2EthPoolToken: TokenData = {
-  address: '0xA5904961f61baE7c4dD8478077556c91BF291cFD',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethLinkPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0xC40D16476380e4037e6b1A2594cAF6a6cc8Da967',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethLinkPoolData
+  )
 }
-const yamv2EthPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const compEthPool = async (tokens: Tokens) => {
+  const poolId = 4
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xA5904961f61baE7c4dD8478077556c91BF291cFD',
+      address: '0x31503dcb60119A812feE820bb7042752019F2355',
+
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const yamv2EthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    YAMV2_TOKEN,
-    SUSHI_TOKEN,
-    yamv2EthPoolToken,
-    masterChefStakingPool,
-    yamv2EthPoolData,
-    WETH_TOKEN,
-    yamv2EthPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.comp,
+    }
   )
+  const ethCompPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x31503dcb60119A812feE820bb7042752019F2355',
+      },
+    ],
+  })
 
-//REN-ETH
-const renEthPoolId = 13
-const renEthPoolToken: TokenData = {
-  address: '0x8Bd1661Da98EBDd3BD080F0bE4e6d9bE8cE9858c',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethCompPoolData
+  )
 }
-const renEthPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const susdEthPool = async (tokens: Tokens) => {
+  const poolId = 3
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0x8Bd1661Da98EBDd3BD080F0bE4e6d9bE8cE9858c',
+      address: '0xF1F85b2C54a2bD284B1cf4141D64fD171Bd85539',
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const renEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    REN_TOKEN,
-    SUSHI_TOKEN,
-    renEthPoolToken,
-    masterChefStakingPool,
-    renEthPoolData,
-    WETH_TOKEN,
-    renEthPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.susd,
+    }
   )
-
-//CRV-ETH
-const crvEthPoolId = 17
-const crvEthPoolToken: TokenData = {
-  address: '0x3dA1313aE46132A397D90d95B1424A9A7e3e0fCE',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  const ethSusdPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0xF1F85b2C54a2bD284B1cf4141D64fD171Bd85539',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    ethSusdPoolData
+  )
 }
-const crvEthPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
+
+export const serumEthPool = async (tokens: Tokens) => {
+  const poolId = 15
+  const liquidityPool = new PoolToken(
     {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0x3dA1313aE46132A397D90d95B1424A9A7e3e0fCE',
+      address: '0x117d4288B3635021a3D612FE05a3Cbf5C717fEf2',
+
+      ticker: 'SLP',
     },
-  ],
-})
-
-export const crvEthPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    CRV_TOKEN,
-    SUSHI_TOKEN,
-    crvEthPoolToken,
-    masterChefStakingPool,
-    crvEthPoolData,
-    WETH_TOKEN,
-    crvEthPoolId
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.srm,
+    }
   )
+  const serumEthPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x117d4288B3635021a3D612FE05a3Cbf5C717fEf2',
+      },
+    ],
+  })
 
-
-//sUSD-BASED
-const susdBasedPoolId = 14
-const susdBasedPoolToken: TokenData = {
-  address: '0xaAD22f5543FCDaA694B68f94Be177B561836AE57',
-  ABI: ERC20_ABI,
-  ticker: 'UNIV2',
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    serumEthPoolData
+  )
 }
-const susdBasedPoolData = Object.assign({}, poolData, {
-  links: [
-    ...poolData.links,
-    {
-      title: 'Pool',
-      link:
-        'https://uniswap.info/pair/0xaAD22f5543FCDaA694B68f94Be177B561836AE57',
-    },
-  ],
-})
 
-export const susdBasedPool = async (App) =>
-  await getSushiPoolData(
-    App,
-    BASED_TOKEN,
-    SUSHI_TOKEN,
-    susdBasedPoolToken,
-    masterChefStakingPool,
-    susdBasedPoolData,
-    SUSD_TOKEN,
-    susdBasedPoolId
+export const yamv2EthPool = async (tokens: Tokens) => {
+  const poolId = 16
+  const liquidityPool = new PoolToken(
+    {
+      address: '0x95b54C8Da12BB23F7A5F6E26C38D04aCC6F81820',
+      ticker: 'SLP',
+    },
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.yamv2,
+    }
   )
+  const yamv2EthPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x95b54C8Da12BB23F7A5F6E26C38D04aCC6F81820',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    yamv2EthPoolData
+  )
+}
+
+export const renEthPool = async (tokens: Tokens) => {
+  const poolId = 13
+  const liquidityPool = new PoolToken(
+    {
+      address: '0x611CDe65deA90918c0078ac0400A72B0D25B9bb1',
+      ticker: 'SLP',
+    },
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.ren,
+    }
+  )
+
+  const renEthPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x611CDe65deA90918c0078ac0400A72B0D25B9bb1',
+      },
+    ],
+  })
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    renEthPoolData
+  )
+}
+
+export const crvEthPool = async (tokens: Tokens) => {
+  const poolId = 17
+  const liquidityPool = new PoolToken(
+    {
+      address: '0x58Dc5a51fE44589BEb22E8CE67720B5BC5378009',
+      ticker: 'SLP',
+    },
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.crv,
+    }
+  )
+  const crvEthPoolData = Object.assign({}, poolData, {
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://sushiswap.vision/pair/0x58Dc5a51fE44589BEb22E8CE67720B5BC5378009',
+      },
+    ],
+  })
+
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    crvEthPoolData
+  )
+}
+
+export const susdBasedPool = async (tokens: Tokens) => {
+  const poolId = 14
+  const liquidityPool = new PoolToken(
+    {
+      address: '0xaAD22f5543FCDaA694B68f94Be177B561836AE57',
+      ticker: 'UNI-V2',
+    },
+    {
+      poolToken1: tokens.susd,
+      poolToken2: tokens.based,
+    }
+  )
+  const susdBasedPoolData = Object.assign({}, poolData, {
+    name: 'Uni',
+    links: [
+      ...poolData.links,
+      {
+        title: 'Pool',
+        link:
+          'https://uniswap.info/pair/0xaAD22f5543FCDaA694B68f94Be177B561836AE57',
+      },
+    ],
+  })
+
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    susdBasedPoolData
+  )
+}

@@ -1,4 +1,4 @@
-import { ERC20_ABI, SYNTHETIX_STAKING_ABI } from '../../../data/constants'
+import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
 import { PoolToken, StakingPool } from '../../../data/token'
 import { Tokens } from '../../../data/TokenManager'
 import { PoolData, RiskLevel } from '../../../types'
@@ -95,12 +95,67 @@ export const yyCrvUsdcPool = async (tokens: Tokens) => {
   const liquidityPool = new PoolToken(
     {
       address: '0x661b94d96ADb18646e791A06576F7905a8d1BEF6',
-      ABI: ERC20_ABI,
       ticker: 'CRPT',
     },
     {
       poolToken1: tokens.ycrv,
       poolToken2: tokens.usdc,
+    }
+  )
+  const data = await getSnxBasedBalPool(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.cream,
+    },
+    creamPoolData
+  )
+  console.log(data)
+
+  return data
+}
+
+export const creamWethUniPool = async (tokens: Tokens) => {
+  const stakingPool = new StakingPool({
+    address: '0x65bC20147E2cA6F3bf0819c38E519F8792043b36',
+    ABI: SYNTHETIX_STAKING_ABI,
+  })
+  const liquidityPool = new PoolToken(
+    {
+      address: '0xddF9b7a31b32EBAF5c064C80900046C9e5b7C65F',
+      ticker: 'UNI-V2',
+    },
+    {
+      poolToken1: tokens.cream,
+      poolToken2: tokens.weth,
+    }
+  )
+  const data = await getSnxBasedBalPool(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.cream,
+    },
+    creamPoolData
+  )
+  console.log(data)
+
+  return data
+}
+
+export const creamWethBalPool = async (tokens: Tokens) => {
+  const stakingPool = new StakingPool({
+    address: '0xCcD5cb3401704AF8462a4FFE708a180d3C5c4Da0',
+    ABI: SYNTHETIX_STAKING_ABI,
+  })
+  const liquidityPool = new PoolToken(
+    {
+      address: '0x5a82503652d05B21780f33178FDF53d31c29B916',
+      ticker: 'BPT',
+    },
+    {
+      poolToken1: tokens.cream,
+      poolToken2: tokens.weth,
     }
   )
   const data = await getSnxBasedBalPool(

@@ -19,4 +19,11 @@ declare module '*.json' {
   export default content
 }
 
-declare var App: any
+type AppType = {
+  provider: any
+  isAnon: boolean
+  metamask: boolean
+  YOUR_ADDRESS: string
+}
+
+declare var App: AppType

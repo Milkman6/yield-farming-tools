@@ -1,7 +1,7 @@
-import { RiskLevel } from '../../../../types'
-import { toDollar, toFixed } from '../../../utils'
+import { RiskLevel } from '../../../types'
+import { Tokens } from '../../../data/TokenManager'
 
-export default async function main(App) {
+export const omenPnk = async () => {
   let FPMMs
   const FPMMGQLQuery =
     '{ fixedProductMarketMakers(first: 1000) { id creator collateralToken liquidityParameter scaledLiquidityParameter title arbitrator answerFinalizedTimestamp } }'
@@ -172,27 +172,27 @@ export default async function main(App) {
           smartContract: RiskLevel.HIGH,
           impermanentLoss: RiskLevel.NONE,
         },
-        apr: toFixed(weeklyRoi * 52, 4),
-        prices: [{ label: 'PNK', value: toDollar(pnkUSDValue) }],
+        apr: weeklyRoi * 52,
+        prices: [{ label: 'PNK', value: pnkUSDValue }],
         staking: [
           {
             label: 'Pool Total',
-            value: toDollar(poolValue),
+            value: poolValue,
           },
         ],
         rewards: [],
         ROIs: [
           {
             label: 'Hourly',
-            value: `${toFixed(weeklyRoi / 7 / 24, 4)}%`,
+            value: weeklyRoi / 7 / 24,
           },
           {
             label: 'Daily',
-            value: `${toFixed(weeklyRoi / 7, 4)}%`,
+            value: weeklyRoi / 7,
           },
           {
             label: 'Weekly',
-            value: `${toFixed(weeklyRoi, 4)}%`,
+            value: weeklyRoi,
           },
         ],
         links: [

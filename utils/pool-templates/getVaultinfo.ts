@@ -9,10 +9,10 @@ import {
   YEARN_VAULT_ABI,
   YEARN_VAULT_CONTROLLER_ABI,
   YEARN_VAULT_CONTROLLER_ADDR,
-} from '../../../../data/constants'
-import { priceLookupService } from '../../../../services/price-lookup-service'
-import { getBlockTime, toDollar, toFixed } from '../../../utils'
-import { RiskLevel } from '../../../../types'
+} from '../../data/constants'
+import { priceLookupService } from '../../services/price-lookup-service'
+import { RiskLevel } from '../../types'
+import { getBlockTime } from '../utils'
 
 type Token = {
   ticker: string
@@ -30,36 +30,36 @@ class YearnVault {
   currentBlockNumber: any
   app: any
 
-  public async init(App) {
+  public async init() {
     if (this.app) {
       return
     }
-    this.app = App
+    this.app = global.App
     this.YEARN_VAULT_CONTROLLER = new ethers.Contract(
       YEARN_VAULT_CONTROLLER_ADDR,
       YEARN_VAULT_CONTROLLER_ABI,
-      App.provider
+      this.app.provider
     )
     this.YAERN_DELEGATED_VAULT_CONTROLLER = new ethers.Contract(
       YEARN_DELEGATED_VAULT_CONTROLLER_ADDR,
       YEARN_DELEGATED_VAULT_CONTROLLER_ABI,
-      App.provider
+      this.app.provider
     )
 
     this.CURVE_Y_POOL = new ethers.Contract(
       CURVE_Y_POOL_ADDR,
       CURVE_Y_POOL_ABI,
-      App.provider
+      this.app.provider
     )
 
     this.currentBlockTime = (await getBlockTime()) as number
     this.oneDayInBlocks = (24 * 60 * 60) / this.currentBlockTime
     this.oneWeekInBlocks = this.oneDayInBlocks * 7
-    this.currentBlockNumber = await App.provider.getBlockNumber()
+    this.currentBlockNumber = await this.app.provider.getBlockNumber()
   }
 
-  public async getVaultData(token: Token, App) {
-    await this.init(App)
+  public async getVaultData(token: Token) {
+    await this.init()
     const {
       [token.coingeckoId]: tokenPrice,
     } = await priceLookupService.getPrices([token.coingeckoId])
@@ -108,7 +108,7 @@ class YearnVault {
     try {
       const decimal = 10 ** (await vaultContract.decimals())
       const yourVaultTokenAmount =
-        (await vaultContract.balanceOf(App.YOUR_ADDRESS)) / decimal
+        (await vaultContract.balanceOf(this.app.YOUR_ADDRESS)) / decimal
       const yourVaultTokenInUnderlyingTokenAmount =
         (yourVaultTokenAmount * currentPricePerFullShare) / 1e18
       yourVaultBalance = yourVaultTokenInUnderlyingTokenAmount * tokenPrice
@@ -132,41 +132,41 @@ class YearnVault {
       strategyAddr: await this.YEARN_VAULT_CONTROLLER.strategies(tokenAddr),
       strategyName: '',
       //
-      apr: toFixed(ROI_week * 52, 4),
+      apr: ROI_week * 52,
       risk: {
         smartContract: RiskLevel.LOW,
         impermanentLoss: RiskLevel.NONE,
       },
-      prices: [{ label: tokenTicker, value: toDollar(tokenPrice) }],
+      prices: [{ label: tokenTicker, value: tokenPrice }],
       staking: [
         {
           label: 'Pool Total',
-          value: toDollar(tokenBalance),
+          value: tokenBalance,
         },
         {
           label: 'Your Total',
-          value: toDollar(yourVaultBalance),
+          value: yourVaultBalance,
         },
       ],
       ROIs: [
         {
           label: 'Hourly',
-          value: `${toFixed(ROI_week / 7 / 24, 4)}%`,
+          value: ROI_week / 7 / 24,
         },
         {
           label: 'Daily',
-          value: `${toFixed(ROI_week / 7, 4)}%`,
+          value: ROI_week / 7,
         },
         {
           label: 'Weekly',
-          value: `${toFixed(ROI_week, 4)}%`,
+          value: ROI_week,
         },
       ],
     }
   }
 
-  public async getDelegatedVaultData(token: Token, App) {
-    await this.init(App)
+  public async getDelegatedVaultData(token: Token) {
+    await this.init()
     const {
       [token.coingeckoId]: tokenPrice,
     } = await priceLookupService.getPrices([token.coingeckoId])
@@ -216,7 +216,8 @@ class YearnVault {
     try {
       const decimal = 10 ** (await delegatedVaultContract.decimals())
       const yourVaultTokenAmount =
-        (await delegatedVaultContract.balanceOf(App.YOUR_ADDRESS)) / decimal
+        (await delegatedVaultContract.balanceOf(this.app.YOUR_ADDRESS)) /
+        decimal
       const yourVaultTokenInUnderlyingTokenAmount =
         (yourVaultTokenAmount * currentPricePerFullShare) / 1e18
       yourVaultBalance = yourVaultTokenInUnderlyingTokenAmount * tokenPrice
@@ -241,8 +242,8 @@ class YearnVault {
       ),
       strategyName: '',
       //
-      apr: toFixed(ROI_week * 52, 4),
-      prices: [{ label: tokenTicker, value: toDollar(tokenPrice) }],
+      apr: ROI_week * 52,
+      prices: [{ label: tokenTicker, value: tokenPrice }],
       risk: {
         smartContract: RiskLevel.LOW,
         impermanentLoss: RiskLevel.LOW,
@@ -250,25 +251,25 @@ class YearnVault {
       staking: [
         {
           label: 'Pool Total',
-          value: toDollar(tokenBalance),
+          value: tokenBalance,
         },
         {
           label: 'Your Total',
-          value: toDollar(yourVaultBalance),
+          value: yourVaultBalance,
         },
       ],
       ROIs: [
         {
           label: 'Hourly',
-          value: `${toFixed(ROI_week / 7 / 24, 4)}%`,
+          value: ROI_week / 7 / 24,
         },
         {
           label: 'Daily',
-          value: `${toFixed(ROI_week / 7, 4)}%`,
+          value: ROI_week / 7,
         },
         {
           label: 'Weekly',
-          value: `${toFixed(ROI_week, 4)}%`,
+          value: ROI_week,
         },
       ],
     }
