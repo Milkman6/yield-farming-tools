@@ -8,7 +8,7 @@ import {
 } from '../../../data/constants'
 import { yearnVault } from '../../pool-templates/yvault'
 
-export async function yVaultTusd(App) {
+export async function yVaultTusd() {
   if (!global.App.metamask) {
     throw new Error('Can only get vault data when connected through web3')
   }
@@ -19,7 +19,7 @@ export async function yVaultTusd(App) {
     tokenAddr: TUSD_TOKEN_ADDR,
   }
 
-  const vault = await yearnVault.getVaultData(params, App)
+  const vault = await yearnVault.getVaultData(params)
 
   return {
     provider: 'Yearn',
@@ -39,7 +39,7 @@ export async function yVaultTusd(App) {
   }
 }
 
-export async function yvaultAlink(App) {
+export async function yvaultAlink() {
   if (!global.App.metamask) {
     throw new Error('Can only get vault data when connected through web3')
   }
@@ -48,7 +48,7 @@ export async function yvaultAlink(App) {
     coingeckoId: 'chainlink',
     tokenAddr: ALINK_VAULT_ADDR,
   }
-  const vault = await yearnVault.getDelegatedVaultData(params, App)
+  const vault = await yearnVault.getDelegatedVaultData(params)
 
   return {
     provider: 'Yearn',
@@ -68,7 +68,7 @@ export async function yvaultAlink(App) {
   }
 }
 
-export async function yVaultDai(App) {
+export async function yVaultDai() {
   if (!global.App.metamask) {
     throw new Error('Can only get vault data when connected through web3')
   }
@@ -78,7 +78,7 @@ export async function yVaultDai(App) {
     coingeckoId: 'dai',
     tokenAddr: DAI_TOKEN_ADDR,
   }
-  const vault = await yearnVault.getVaultData(params, App)
+  const vault = await yearnVault.getVaultData(params)
 
   return {
     provider: 'Yearn',
@@ -98,7 +98,7 @@ export async function yVaultDai(App) {
   }
 }
 
-export async function yVaultUsdc(App) {
+export async function yVaultUsdc() {
   if (!global.App.metamask) {
     throw new Error('Can only get vault data when connected through web3')
   }
@@ -108,7 +108,7 @@ export async function yVaultUsdc(App) {
     coingeckoId: 'usd-coin',
     tokenAddr: USDC_TOKEN_ADDR,
   }
-  const vault = await yearnVault.getVaultData(params, App)
+  const vault = await yearnVault.getVaultData(params)
 
   return {
     provider: 'Yearn',
@@ -128,7 +128,7 @@ export async function yVaultUsdc(App) {
   }
 }
 
-export async function yVaultUsdt(App) {
+export async function yVaultUsdt() {
   if (!global.App.metamask) {
     throw new Error('Can only get vault data when connected through web3')
   }
@@ -138,7 +138,7 @@ export async function yVaultUsdt(App) {
     coingeckoId: 'tether',
     tokenAddr: USDT_TOKEN_ADDR,
   }
-  const vault = await yearnVault.getVaultData(params, App)
+  const vault = await yearnVault.getVaultData(params)
 
   return {
     provider: 'Yearn',
@@ -158,7 +158,7 @@ export async function yVaultUsdt(App) {
   }
 }
 
-export async function yVaultYcrv(App) {
+export async function yVaultYcrv() {
   if (!global.App.metamask) {
     throw new Error('Can only get vault data when connected through web3')
   }
@@ -169,7 +169,7 @@ export async function yVaultYcrv(App) {
     tokenAddr: YCRV_TOKEN_ADDR,
   }
 
-  const vault = await yearnVault.getVaultData(params, App)
+  const vault = await yearnVault.getVaultData(params)
 
   return {
     provider: 'Yearn',

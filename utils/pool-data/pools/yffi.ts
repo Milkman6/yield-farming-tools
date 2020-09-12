@@ -1,15 +1,14 @@
-import { PoolData, RiskLevel } from '../../../types'
-import { Tokens } from '../../../data/TokenManager'
-import { StakingPool, PoolToken } from '../../../data/token'
+import deepmerge from 'deepmerge'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
+import { PoolToken, StakingPool } from '../../../data/token'
+import { Tokens } from '../../../data/TokenManager'
+import { PoolData, RiskLevel } from '../../../types'
 import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
 import { getSnxBasedStakingData } from '../../pool-templates/snx-staking'
 
-// todo: update pool data per pool
 const yffiPoolData: PoolData = {
   provider: 'yffi.finance',
   name: 'Balancer',
-  added: '2020-07-09 22:50:58',
   risk: {
     smartContract: RiskLevel.MEDIUM,
     impermanentLoss: RiskLevel.MEDIUM,
@@ -24,18 +23,8 @@ const yffiPoolData: PoolData = {
       link: 'https://www.curve.fi/iearn/deposit',
     },
     {
-      title: 'Balancer Pool',
-      link:
-        'https://pools.balancer.exchange/#/pool/0xc855F1572c8128ADd6F0503084Ba23930B7461f8',
-    },
-    {
       title: 'Staking',
       link: 'https://www.yffi.finance/#/stake',
-    },
-    {
-      title: 'Token',
-      link:
-        'https://etherscan.io/address/0xCee1d3c3A02267e37E6B373060F79d5d7b9e1669',
     },
   ],
 }
@@ -46,16 +35,19 @@ export const ycrvStaking = async (tokens: Tokens) => {
     ABI: SYNTHETIX_STAKING_ABI,
   })
 
-  const data = await getSnxBasedStakingData(
+  return await getSnxBasedStakingData(
     {
       stakingPool,
       stakingToken: tokens.ycrv,
       rewardToken: tokens.yffi,
     },
-    yffiPoolData
+    deepmerge(yffiPoolData, {
+      name: '',
+      risk: {
+        impermanentLoss: RiskLevel.NONE,
+      },
+    })
   )
-
-  return data
 }
 
 export const yffiDai = async (tokens: Tokens) => {
@@ -75,16 +67,21 @@ export const yffiDai = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.yffi,
     },
-    yffiPoolData
+    deepmerge(yffiPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-
-  return data
 }
 
 export const yffiYcrv = async (tokens: Tokens) => {
@@ -104,14 +101,19 @@ export const yffiYcrv = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.yffi,
     },
-    yffiPoolData
+    deepmerge(yffiPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-
-  return data
 }

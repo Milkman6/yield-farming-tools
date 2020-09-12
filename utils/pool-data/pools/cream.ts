@@ -1,3 +1,4 @@
+import deepmerge from 'deepmerge'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
 import { PoolToken, StakingPool } from '../../../data/token'
 import { Tokens } from '../../../data/TokenManager'
@@ -8,7 +9,6 @@ import { getSnxBasedStakingData } from '../../pool-templates/snx-staking'
 const creamPoolData: PoolData = {
   provider: 'Cream',
   name: 'Swap',
-  added: '2020-09-09 22:50:58',
   risk: {
     smartContract: RiskLevel.HIGH,
     impermanentLoss: RiskLevel.HIGH,
@@ -22,10 +22,6 @@ const creamPoolData: PoolData = {
     {
       title: 'Staking',
       link: 'https://app.cream.finance/reward#CreamSwap',
-    },
-    {
-      title: 'Pool',
-      link: 'https://app.cream.finance/pools/pool/',
     },
   ],
 }
@@ -47,17 +43,21 @@ export const creamUsdcPool = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  console.log(data)
-
-  return data
 }
 
 export const creamWethPool = async (tokens: Tokens) => {
@@ -75,17 +75,21 @@ export const creamWethPool = async (tokens: Tokens) => {
       poolToken2: tokens.weth,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  console.log(data)
-
-  return data
 }
 
 export const yyCrvUsdcPool = async (tokens: Tokens) => {
@@ -103,17 +107,21 @@ export const yyCrvUsdcPool = async (tokens: Tokens) => {
       poolToken2: tokens.usdc,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  console.log(data)
-
-  return data
 }
 
 export const creamWethUniPool = async (tokens: Tokens) => {
@@ -131,19 +139,27 @@ export const creamWethUniPool = async (tokens: Tokens) => {
       poolToken2: tokens.weth,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      name: 'Uni',
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+      risk: {
+        smartContract: RiskLevel.MEDIUM,
+      },
+    })
   )
-  console.log(data)
-
-  return data
 }
-// fix name
+
 export const creamWethBalPool = async (tokens: Tokens) => {
   const stakingPool = new StakingPool({
     address: '0xCcD5cb3401704AF8462a4FFE708a180d3C5c4Da0',
@@ -159,15 +175,25 @@ export const creamWethBalPool = async (tokens: Tokens) => {
       poolToken2: tokens.weth,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      name: 'Bal',
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+      risk: {
+        smartContract: RiskLevel.MEDIUM,
+      },
+    })
   )
-  return data
 }
 
 export const crCreamCrYfi = async (tokens: Tokens) => {
@@ -185,15 +211,21 @@ export const crCreamCrYfi = async (tokens: Tokens) => {
       poolToken2: tokens.crYfi,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  return data
 }
 
 export const yUsdUsdc = async (tokens: Tokens) => {
@@ -211,15 +243,21 @@ export const yUsdUsdc = async (tokens: Tokens) => {
       poolToken2: tokens.usdc,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  return data
 }
 
 export const yEthWeth = async (tokens: Tokens) => {
@@ -237,15 +275,21 @@ export const yEthWeth = async (tokens: Tokens) => {
       poolToken2: tokens.yEth,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  return data
 }
 
 export const crYethCrYusd = async (tokens: Tokens) => {
@@ -263,15 +307,21 @@ export const crYethCrYusd = async (tokens: Tokens) => {
       poolToken2: tokens.crYusd,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  return data
 }
 
 export const yfiUsdc = async (tokens: Tokens) => {
@@ -289,15 +339,24 @@ export const yfiUsdc = async (tokens: Tokens) => {
       poolToken2: tokens.usdc,
     }
   )
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://app.cream.finance/pools/pool/${liquidityPool.address}`,
+        },
+      ],
+      risk: {
+        impermanentLoss: RiskLevel.MEDIUM,
+      },
+    })
   )
-  return data
 }
 
 export const crCreamStaking = async (tokens: Tokens) => {
@@ -306,14 +365,18 @@ export const crCreamStaking = async (tokens: Tokens) => {
     ABI: SYNTHETIX_STAKING_ABI,
   })
 
-  const data = await getSnxBasedStakingData(
+  return await getSnxBasedStakingData(
     {
       stakingPool,
       stakingToken: tokens.crCream,
       rewardToken: tokens.cream,
     },
-    creamPoolData
+    deepmerge(creamPoolData, {
+      name: '',
+      risk: {
+        smartContract: RiskLevel.MEDIUM,
+        impermanentLoss: RiskLevel.NONE,
+      },
+    } as PoolData)
   )
-
-  return data
 }

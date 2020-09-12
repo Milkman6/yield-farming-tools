@@ -45,7 +45,6 @@ export class Token extends ethers.Contract {
     }
 
     this.price = await this.getCoingeckoPrice()
-    console.log('Token -> getPrice -> this.price', this.price)
     return this.price
   }
 
@@ -58,11 +57,17 @@ export class Token extends ethers.Contract {
     return this.totalTokenSupply
   }
 
-  public async getBalance(address: string) {
+  public async getBalance(address: string, token?: Token) {
     if (address === global?.App?.YOUR_ADDRESS && global?.App?.isAnon) {
       return 0
     }
-    const balance = (await this.balanceOf(address)) / this.numBase
+    let balance =
+      (await this.balanceOf(address)) / (token?.numBase || this.numBase)
+
+    if (token?.underlyingToken) {
+      balance = token.getUnderlyingBalance(balance)
+    }
+
     return balance
   }
 
@@ -131,7 +136,7 @@ export class SynthToken extends Token {
     }
   }
 
-  public async convertBalanceToUnderlying(balance: number) {
+  public async getUnderlyingBalance(balance: number) {
     let convertedBalance: number
     let exchangeRate
 
@@ -148,7 +153,7 @@ export class SynthToken extends Token {
     }
 
     if (this.underlyingToken?.synthType) {
-      convertedBalance = await this.underlyingToken.convertBalanceToUnderlying(
+      convertedBalance = await this.underlyingToken.getUnderlyingBalance(
         convertedBalance
       )
     }
@@ -218,12 +223,7 @@ export class PoolToken extends Token {
     }
     await this.getTokenBalances()
     await this.getTotalSupply()
-    console.log(
-      '2',
-      this.totalTokenTwoInPool,
-      this.totalTokenOneInPool,
-      this.totalTokenSupply
-    )
+
     this.price =
       (this.totalTokenTwoInPool * (await this.poolToken2.getPrice()) +
         this.totalTokenOneInPool * (await this.poolToken1.getPrice())) /
@@ -250,4 +250,5 @@ export class StakingPool extends Token {
 type StakingPoolProps = {
   address: string
   ABI: any
+  numBase?: number
 }

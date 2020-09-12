@@ -174,7 +174,6 @@ export const yamYcrvPool = async (tokens: Tokens) => {
     },
     yCrvPoolData
   )
-  console.log(data)
 
   return data
 }

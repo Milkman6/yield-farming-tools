@@ -1,3 +1,4 @@
+import deepmerge from 'deepmerge'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
 import { PoolToken, StakingPool } from '../../../data/token'
 import { Tokens } from '../../../data/TokenManager'
@@ -7,9 +8,8 @@ import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
 const poolData: PoolData = {
   provider: 'yfv.finance',
   name: 'Uni',
-  added: '2020-09-02 22:50:58',
   risk: {
-    smartContract: RiskLevel.LOW,
+    smartContract: RiskLevel.MEDIUM,
     impermanentLoss: RiskLevel.MEDIUM,
   },
   links: [
@@ -21,10 +21,6 @@ const poolData: PoolData = {
     {
       title: 'Staking',
       link: 'https://yfv.finance/',
-    },
-    {
-      title: 'Pool',
-      link: `https://pools.balancer.exchange/#/pool/`,
     },
   ],
 }
@@ -51,7 +47,14 @@ export const yfiPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }
 
@@ -76,7 +79,14 @@ export const balPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }
 
@@ -98,7 +108,14 @@ export const batPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }
 
@@ -120,7 +137,14 @@ export const renPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }
 
@@ -142,7 +166,14 @@ export const kncPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }
 
@@ -164,7 +195,14 @@ export const wethPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }
 
@@ -186,6 +224,13 @@ export const linkPool = async (tokens: Tokens) => {
       liquidityPool,
       rewardToken: tokens.yfv,
     },
-    poolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
 }

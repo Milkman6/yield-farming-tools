@@ -13,8 +13,10 @@ export async function getSnxBasedStakingData(
   { rewardToken, stakingPool, stakingToken }: RequiredTokens,
   poolData: PoolData
 ) {
-  const yourStakedTokens = await stakingPool.getBalance(global.App.YOUR_ADDRESS)
-  console.log('yourStakedTokens', yourStakedTokens, global.App.YOUR_ADDRESS)
+  const yourStakedTokens = await stakingPool.getBalance(
+    global.App.YOUR_ADDRESS,
+    stakingToken
+  )
 
   const totalStakedTokens = await stakingToken.getBalance(stakingPool.address)
 

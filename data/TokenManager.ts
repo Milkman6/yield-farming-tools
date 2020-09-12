@@ -289,7 +289,6 @@ export class TokenManager {
     Object.keys(this.tokens).forEach((id: string) => {
       const selectedToken: Token = this.tokens[id]
       selectedToken.setPrice(prices?.data[selectedToken.tokenId]?.usd)
-      console.log(selectedToken.price, selectedToken.ticker)
     })
   }
 }

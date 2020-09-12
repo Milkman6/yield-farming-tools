@@ -1,13 +1,12 @@
-import { PoolData, RiskLevel } from '../../../types'
-import { Tokens } from '../../../data/TokenManager'
-import { StakingPool, PoolToken } from '../../../data/token'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
+import { PoolToken, StakingPool } from '../../../data/token'
+import { Tokens } from '../../../data/TokenManager'
+import { PoolData, RiskLevel } from '../../../types'
 import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
 
 const poolData: PoolData = {
   provider: 'Based',
   name: 'Uniswap',
-  added: '2020-08-24 18:14:46',
   risk: {
     smartContract: RiskLevel.HIGH,
     impermanentLoss: RiskLevel.HIGH,

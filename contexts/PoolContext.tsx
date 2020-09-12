@@ -29,13 +29,9 @@ const usePools = () => {
   }
 
   const getPoolInfo = async () => {
-    console.log('ethApp', ethApp, global.App)
     if (ethApp && ethApp.YOUR_ADDRESS && typeof window !== 'undefined') {
-      console.log('getstuff')
       setLoadState(LoadState.LOADING)
-      console.log(ethApp)
       const tokens = await initTokens()
-      console.log('getPoolInfo -> tokens', tokens)
 
       const fetchedPools = []
       const yourPoolPositions = []

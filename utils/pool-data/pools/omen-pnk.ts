@@ -1,5 +1,4 @@
 import { RiskLevel } from '../../../types'
-import { Tokens } from '../../../data/TokenManager'
 
 export const omenPnk = async () => {
   let FPMMs

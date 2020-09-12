@@ -1,10 +1,10 @@
 import { ethers } from 'ethers'
 import {
-  YUSD_USDC_BPT_TOKEN_ADDR,
   BALANCER_POOL_ABI,
   ERC20_ABI,
-  YUSDSEP20_TOKEN_ADDR,
   USDC_TOKEN_ADDR,
+  YUSDSEP20_TOKEN_ADDR,
+  YUSD_USDC_BPT_TOKEN_ADDR,
 } from '../../../data/constants'
 import { priceLookupService } from '../../../services/price-lookup-service'
 import { RiskLevel } from '../../../types'

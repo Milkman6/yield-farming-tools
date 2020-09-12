@@ -13,37 +13,31 @@ export async function getSnxBasedBalPool(
   { stakingPool, liquidityPool, rewardToken }: RequiredTokens,
   poolData: PoolData
 ) {
-  console.log('starting')
   const poolToken1 = liquidityPool.poolToken1
   const poolToken2 = liquidityPool.poolToken2
 
-  console.log('2', poolToken1, poolToken2)
   const yourStakedTokens = await stakingPool.getBalance(global.App.YOUR_ADDRESS)
-  console.log('3', yourStakedTokens)
-
   const totalStakedLiqTokens = await liquidityPool.getBalance(
     stakingPool.address
   )
 
   const weeklyReward = await get_synth_weekly_rewards(stakingPool)
   const yourEarnedRewards = await stakingPool.getMyRewards()
-  console.log('4', weeklyReward, yourEarnedRewards)
 
   const rewardPerToken = weeklyReward / totalStakedLiqTokens
-
-  console.log('5', rewardPerToken)
 
   const weeklyRoi =
     (rewardPerToken * (await rewardToken.getPrice()) * 100) /
     (await liquidityPool.getPrice())
 
   await liquidityPool.getTokenRatios()
+  // todo: refactor
   let myPoolToken1Balance =
     (yourStakedTokens * liquidityPool.price * liquidityPool.tokenOneRatio) /
     poolToken1.price
   let poolToken1UnderlyingPrice = poolToken1.price
   if (poolToken1?.underlyingToken && myPoolToken1Balance > 0) {
-    myPoolToken1Balance = await poolToken1.convertBalanceToUnderlying(
+    myPoolToken1Balance = await poolToken1.getUnderlyingBalance(
       myPoolToken1Balance
     )
     poolToken1UnderlyingPrice = await poolToken1.getUnderlyingPrice()
@@ -55,7 +49,7 @@ export async function getSnxBasedBalPool(
   let poolToken2UnderlyingPrice = poolToken2.price
 
   if (poolToken2?.underlyingToken && myPoolToken2Balance > 0) {
-    myPoolToken2Balance = await poolToken2.convertBalanceToUnderlying(
+    myPoolToken2Balance = await poolToken2.getUnderlyingBalance(
       myPoolToken2Balance
     )
     poolToken2UnderlyingPrice = await poolToken2.getUnderlyingPrice()

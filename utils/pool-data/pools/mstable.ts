@@ -1,16 +1,16 @@
-import { Tokens } from '../../../data/TokenManager'
-import { StakingPool, PoolToken } from '../../../data/token'
+import deepmerge from 'deepmerge'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
-import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
+import { PoolToken, StakingPool } from '../../../data/token'
+import { Tokens } from '../../../data/TokenManager'
 import { PoolData, RiskLevel } from '../../../types'
-// todo: pool data
-const mtaPoolData: PoolData = {
+import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
+
+const poolData: PoolData = {
   provider: 'mStable',
   name: 'Bal',
-  added: '2020-08-09 22:50:58',
   risk: {
-    smartContract: RiskLevel.LOW,
-    impermanentLoss: RiskLevel.LOW,
+    smartContract: RiskLevel.MEDIUM,
+    impermanentLoss: RiskLevel.HIGH,
   },
   links: [
     {
@@ -18,17 +18,12 @@ const mtaPoolData: PoolData = {
       link: 'https://medium.com/mstable/introducing-mstable-earn-6ac5f4e7560e',
     },
     {
-      title: 'Balancer Pool',
-      link:
-        'https://pools.balancer.exchange/#/pool/0x72Cd8f4504941Bf8c5a21d1Fd83A96499FD71d2C',
-    },
-    {
       title: 'Stake',
       link: 'https://app.mstable.org/earn',
     },
   ],
 }
-// todo: add bal rewards
+
 export const mUsdUsdc = async (tokens: Tokens) => {
   const stakingPool = new StakingPool({
     address: '0x881c72D1e6317f10a1cDCBe05040E7564E790C80',
@@ -46,17 +41,24 @@ export const mUsdUsdc = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.mta,
     },
-    mtaPoolData
+    deepmerge(poolData, {
+      risk: {
+        impermanentLoss: RiskLevel.LOW,
+      },
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-  console.log(data)
-
-  return data
 }
 
 export const mtaWeth = async (tokens: Tokens) => {
@@ -76,16 +78,21 @@ export const mtaWeth = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.mta,
     },
-    mtaPoolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://uniswap.info/pair/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-
-  return data
 }
 
 export const musdWeth = async (tokens: Tokens) => {
@@ -105,16 +112,21 @@ export const musdWeth = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.mta,
     },
-    mtaPoolData
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-
-  return data
 }
 
 export const musdMta = async (tokens: Tokens) => {
@@ -134,14 +146,22 @@ export const musdMta = async (tokens: Tokens) => {
     }
   )
 
-  const data = await getSnxBasedBalPool(
+  return await getSnxBasedBalPool(
     {
       stakingPool,
       liquidityPool,
       rewardToken: tokens.mta,
     },
-    mtaPoolData
+    deepmerge(poolData, {
+      risk: {
+        impermanentLoss: RiskLevel.MEDIUM,
+      },
+      links: [
+        {
+          title: 'Pool',
+          link: `https://pools.balancer.exchange/#/pool/${liquidityPool.address}`,
+        },
+      ],
+    })
   )
-
-  return data
 }

@@ -26,8 +26,8 @@ export const getTokenPriceList = async (tokenList: Token[]) => {
   return tokenPriceList
 }
 
-export const getRoiList = async (weeklyRoi: number) => {
-  return [
+export const getRoiList = (weeklyRoi: number) => {
+  const roiList = [
     {
       label: 'Hourly',
       value: weeklyRoi / 7 / 24,
@@ -41,4 +41,5 @@ export const getRoiList = async (weeklyRoi: number) => {
       value: weeklyRoi,
     },
   ]
+  return roiList
 }

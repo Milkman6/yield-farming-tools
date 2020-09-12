@@ -172,7 +172,7 @@ const PoolItem = ({ poolItemData }) => {
       </Grid>
       <Collapse mt={4} isOpen={show}>
         <Divider mb={4} />
-        <SimpleGrid minChildWidth="212px" spacing={4} cursor="auto">
+        <SimpleGrid minChildWidth="250px" spacing={4} cursor="auto">
           <LinkList links={poolItemData.links || []} />
           <DetailItem title="Prices" data={poolItemData.prices} />
           <DetailItem title="ROI" data={poolItemData.ROIs} asPercent={true} />
@@ -305,11 +305,11 @@ const DetailItem = ({ title, data, asPercent = false }) =>
                 fontWeight="bold"
                 key={label}
                 pb=".1rem"
-                sx={{ wordWrap: 'nowrap' }}
+                sx={{ whiteSpace: 'nowrap' }}
               >
                 {label}
               </Text>
-              <Text key={value} pb=".1rem" sx={{ wordWrap: 'nowrap' }}>
+              <Text key={value} pb=".1rem" sx={{ whiteSpace: 'nowrap' }}>
                 {asPercent ? toPercent(value, 4) : toDollar(value)}
               </Text>
             </>
