@@ -2,7 +2,7 @@ import { MASTER_CHEF_ABI } from '../../../data/constants'
 import { PoolToken, StakingPool } from '../../../data/token'
 import { Tokens } from '../../../data/TokenManager'
 import { PoolData, RiskLevel } from '../../../types'
-import { getSushiPoolData } from '../../pool-templates/sushi-based'
+import { getSushiPoolData } from '../../pool-templates/sushi-staking'
 
 const poolData: PoolData = {
   provider: 'Sushi',

@@ -4,7 +4,7 @@ import {
   YFFI_REWARD_CONTRACT_ABI,
   SYNTHETIX_STAKING_ABI,
 } from '../../../../data/constants'
-import { getSnxBasedStakingData } from '../../../pool-templates/staking'
+import { getSnxBasedStakingData } from '../../../pool-templates/snx-staking'
 import {
   COMP_TOKEN,
   LEND_TOKEN,
@@ -19,7 +19,7 @@ import {
 import { getSnxBasedUniPoolStakingData } from '../../../pool-templates/uniswap-staking'
 import { PoolData, RiskLevel, TokenData } from '../../../../types'
 import { Tokens } from '../../../../data/TokenManager'
-import { getSnxBasedBalPool } from '../../../pool-templates/balancer-staking'
+import { getSnxBasedBalPool } from '../../../pool-templates/lp-staking'
 import { StakingPool, PoolToken } from '../../../../data/token'
 
 const poolData: PoolData = {

@@ -1,7 +1,7 @@
 import { Tokens } from '../../../data/TokenManager'
 import { StakingPool, PoolToken } from '../../../data/token'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
-import { getSnxBasedBalPool } from '../../pool-templates/balancer-staking'
+import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
 import { PoolData, RiskLevel } from '../../../types'
 // todo: pool data
 const mtaPoolData: PoolData = {

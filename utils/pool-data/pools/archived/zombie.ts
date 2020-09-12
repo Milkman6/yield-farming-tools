@@ -9,7 +9,7 @@ import {
   ZOMBIE_TOKEN,
 } from '../../../../data/token-data'
 import { PoolData, RiskLevel, TokenData } from '../../../../types'
-import { getSnxBasedStakingData } from '../../../pool-templates/staking'
+import { getSnxBasedStakingData } from '../../../pool-templates/snx-staking'
 import { getSnxBasedUniPoolStakingData } from '../../../pool-templates/uniswap-staking'
 
 const poolData: PoolData = {

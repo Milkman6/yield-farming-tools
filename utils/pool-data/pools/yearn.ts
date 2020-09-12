@@ -6,7 +6,7 @@ import {
   USDT_TOKEN_ADDR,
   YCRV_TOKEN_ADDR,
 } from '../../../data/constants'
-import { yearnVault } from '../../pool-templates/getVaultinfo'
+import { yearnVault } from '../../pool-templates/yvault'
 
 export async function yVaultTusd(App) {
   if (!global.App.metamask) {

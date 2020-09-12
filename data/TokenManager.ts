@@ -1,7 +1,7 @@
-import { Token } from './token'
-import { YAM_TOKEN_ABI } from './constants'
-import { asyncForEach, sleep } from '../utils/utils'
 import axios from 'axios'
+import { CR_TOKEN_ABI, YAM_TOKEN_ABI, YEARN_TOKEN_ABI } from './constants'
+import { SynthToken, Token } from './token'
+import { SynthType } from '../types'
 
 export class TokenManager {
   tokens: Tokens = {} as Tokens
@@ -218,6 +218,64 @@ export class TokenManager {
       ticker: 'mUSD',
       tokenId: 'musd',
     })
+    this.tokens.crCream = new SynthToken(
+      {
+        address: '0x892b14321a4fcba80669ae30bd0cd99a7ecf6ac0',
+        ABI: CR_TOKEN_ABI,
+        ticker: 'crCREAM',
+        numBase: 1e8,
+      },
+      SynthType.CREAM,
+      this.tokens.cream
+    )
+    this.tokens.crYfi = new SynthToken(
+      {
+        address: '0xcbae0a83f4f9926997c8339545fb8ee32edc6b76',
+        ABI: CR_TOKEN_ABI,
+        ticker: 'crYFI',
+        numBase: 1e8,
+      },
+      SynthType.CREAM,
+      this.tokens.yfi
+    )
+    this.tokens.yUsd = new SynthToken(
+      {
+        address: '0x5dbcf33d8c2e976c6b560249878e6f1491bca25c',
+        ABI: YEARN_TOKEN_ABI,
+        ticker: 'yUSD',
+      },
+      SynthType.YEARN,
+      this.tokens.ycrv
+    )
+    this.tokens.yEth = new SynthToken(
+      {
+        address: '0xe1237aA7f535b0CC33Fd973D66cBf830354D16c7',
+        ABI: YEARN_TOKEN_ABI,
+        ticker: 'yETH',
+      },
+      SynthType.YEARN,
+      this.tokens.weth
+    )
+    this.tokens.crYeth = new SynthToken(
+      {
+        address: '0x01da76DEa59703578040012357b81ffE62015C2d',
+        ABI: CR_TOKEN_ABI,
+        ticker: 'crYETH',
+        numBase: 1e8,
+      },
+      SynthType.CREAM,
+      this.tokens.yEth
+    )
+    this.tokens.crYusd = new SynthToken(
+      {
+        address: '0x4EE15f44c6F0d8d1136c83EfD2e8E4AC768954c6',
+        ABI: CR_TOKEN_ABI,
+        ticker: 'crYYCRV',
+        numBase: 1e8,
+      },
+      SynthType.CREAM,
+      this.tokens.yUsd
+    )
   }
 
   public async getAllPrices() {
@@ -271,4 +329,10 @@ export type Tokens = {
   yfii: Token
   mta: Token
   musd: Token
+  crCream: SynthToken
+  crYfi: SynthToken
+  yUsd: SynthToken
+  yEth: SynthToken
+  crYeth: SynthToken
+  crYusd: SynthToken
 }

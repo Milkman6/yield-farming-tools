@@ -1,5 +1,6 @@
 import { PoolToken, StakingPool, Token } from '../../data/token'
 import { toFixed } from '../utils'
+import { getTokenPriceList, getRoiList } from '../poolUtils'
 
 type RequiredTokens = {
   stakingPool: StakingPool
@@ -44,11 +45,12 @@ export async function getSushiPoolData(
     links: poolData.links,
     risk: poolData.risk,
     apr: weeklyRoi * 52,
-    prices: [
-      { label: poolToken1.ticker, value: poolToken1.price },
-      { label: poolToken2.ticker, value: poolToken2.price },
-      { label: rewardToken.ticker, value: liquidityPool.price },
-    ],
+    prices: await getTokenPriceList([
+      poolToken1,
+      poolToken2,
+      rewardToken,
+      liquidityPool,
+    ]),
     staking: [
       {
         label: 'Pool Total',
@@ -65,19 +67,6 @@ export async function getSushiPoolData(
         value: yourEarnedRewards * rewardToken.price,
       },
     ],
-    ROIs: [
-      {
-        label: 'Hourly',
-        value: weeklyRoi / 7 / 24,
-      },
-      {
-        label: 'Daily',
-        value: weeklyRoi / 7,
-      },
-      {
-        label: 'Weekly',
-        value: weeklyRoi,
-      },
-    ],
+    ROIs: getRoiList(weeklyRoi),
   }
 }

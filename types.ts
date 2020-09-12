@@ -70,3 +70,11 @@ export enum LoadState {
   LOADED,
   ERROR,
 }
+
+export enum SynthType {
+  SYNTHETIX,
+  CREAM,
+  YEARN,
+  AAVE,
+  COMPOUND,
+}

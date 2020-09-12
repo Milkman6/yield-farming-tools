@@ -1,6 +1,7 @@
 import { StakingPool, Token } from '../../data/token'
 import { PoolData } from '../../types'
 import { get_synth_weekly_rewards, toFixed } from '../utils'
+import { getTokenPriceList, getRoiList } from '../poolUtils'
 
 type RequiredTokens = {
   stakingPool: StakingPool
@@ -13,6 +14,7 @@ export async function getSnxBasedStakingData(
   poolData: PoolData
 ) {
   const yourStakedTokens = await stakingPool.getBalance(global.App.YOUR_ADDRESS)
+  console.log('yourStakedTokens', yourStakedTokens, global.App.YOUR_ADDRESS)
 
   const totalStakedTokens = await stakingToken.getBalance(stakingPool.address)
 
@@ -31,11 +33,8 @@ export async function getSnxBasedStakingData(
     poolRewards: [rewardToken.ticker],
     links: poolData.links,
     risk: poolData.risk,
-    apr: toFixed(weeklyRoi * 52, 4),
-    prices: [
-      { label: stakingToken.ticker, value: stakingToken.price },
-      { label: rewardToken.ticker, value: rewardToken.price },
-    ],
+    apr: weeklyRoi * 52,
+    prices: await getTokenPriceList([stakingToken, rewardToken]),
     staking: [
       {
         label: 'Pool Total',
@@ -52,19 +51,6 @@ export async function getSnxBasedStakingData(
         value: yourEarnedRewards * rewardToken.price,
       },
     ],
-    ROIs: [
-      {
-        label: 'Hourly',
-        value: weeklyRoi / 7 / 24,
-      },
-      {
-        label: 'Daily',
-        value: weeklyRoi / 7,
-      },
-      {
-        label: 'Weekly',
-        value: weeklyRoi,
-      },
-    ],
+    ROIs: getRoiList(weeklyRoi),
   }
 }

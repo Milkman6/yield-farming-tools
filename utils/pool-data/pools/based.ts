@@ -2,7 +2,7 @@ import { PoolData, RiskLevel } from '../../../types'
 import { Tokens } from '../../../data/TokenManager'
 import { StakingPool, PoolToken } from '../../../data/token'
 import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
-import { getSnxBasedBalPool } from '../../pool-templates/balancer-staking'
+import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
 
 const poolData: PoolData = {
   provider: 'Based',

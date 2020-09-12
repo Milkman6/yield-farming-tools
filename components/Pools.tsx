@@ -20,19 +20,17 @@ import {
   Tooltip,
 } from '@chakra-ui/core'
 import { ChevronDownIcon, ChevronUpIcon, RepeatIcon } from '@chakra-ui/icons'
-import constate from 'constate'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
+import { usePoolContext } from '../contexts/PoolContext'
 import { useEthContext } from '../contexts/ProviderContext'
+import { PLACEHOLDER_ADDRESS } from '../data/constants'
 import { LoadState, RiskLevel } from '../types'
-import { getPools } from '../utils/pool-data'
-import { toDollar, toNumber, toFixed, toPercent } from '../utils/utils'
+import { toDollar, toFixed, toPercent } from '../utils/utils'
 import { Card } from './Card'
 import { useFilterSidebarContext } from './FilterSidebar'
 import { useWalletModalContext } from './Sidebar'
-import { PLACEHOLDER_ADDRESS } from '../data/constants'
-import { usePoolContext } from '../contexts/PoolContext'
 
 export const PoolSection: React.FC<{ prefetchedPools: any }> = ({
   prefetchedPools,
@@ -187,6 +185,12 @@ const PoolItem = ({ poolItemData }) => {
               data={poolItemData?.rewards}
             />
           )}
+          {poolItemData?.pooled?.length > 0 && (
+            <DetailItem
+              title="Your Pooled Tokens"
+              data={poolItemData?.pooled}
+            />
+          )}
           {typeof poolItemData.risk !== 'undefined' && (
             <RiskList data={poolItemData.risk} />
           )}
@@ -297,10 +301,15 @@ const DetailItem = ({ title, data, asPercent = false }) =>
         <Grid templateColumns="repeat(2, 1fr)" rowGap={1} columnGap={4}>
           {data.map(({ label, value }) => (
             <>
-              <Text fontWeight="bold" key={label} pb=".1rem">
+              <Text
+                fontWeight="bold"
+                key={label}
+                pb=".1rem"
+                sx={{ wordWrap: 'nowrap' }}
+              >
                 {label}
               </Text>
-              <Text key={value} pb=".1rem">
+              <Text key={value} pb=".1rem" sx={{ wordWrap: 'nowrap' }}>
                 {asPercent ? toPercent(value, 4) : toDollar(value)}
               </Text>
             </>
@@ -339,17 +348,17 @@ export const EarningsSection = ({ ...props }) => {
   const rois = [
     {
       label: 'Hourly',
-      value: toDollar(totalWeeklyRoi / 7 / 24),
+      value: totalWeeklyRoi / 7 / 24,
       text: 'Per Hour',
     },
     {
       label: 'Daily',
-      value: toDollar(totalWeeklyRoi / 7),
+      value: totalWeeklyRoi / 7,
       text: 'Per Day',
     },
     {
       label: 'Weekly',
-      value: toDollar(totalWeeklyRoi),
+      value: totalWeeklyRoi,
       text: 'Per Week',
     },
   ]
@@ -433,7 +442,7 @@ export const YourPools: React.FC = () => {
     const filteredPools = pools.filter(
       (item) =>
         item?.staking[1]?.value > 5 ||
-        (item?.rewards?.length > 0 && toNumber(item?.rewards[0]?.value) > 10)
+        (item?.rewards?.length > 0 && item?.rewards[0]?.value > 10)
     )
     setYourPools(filteredPools)
   }, [pools])
@@ -568,7 +577,7 @@ const RewardList = ({ yourPoolGroupings }) =>
                   {poolItem.name}
                 </Text>
                 <Text key={poolItem.name + '-val'}>
-                  {poolItem.staking[1].value}
+                  {toDollar(poolItem.staking[1].value)}
                 </Text>
               </>
             ))}
@@ -605,7 +614,7 @@ const ClaimableList = ({ yourPoolGroupings, ...props }) =>
                       {poolItem?.rewards[0]?.label}
                     </Text>
                     <Text key={poolItem.name + '-val'}>
-                      {poolItem?.rewards[0]?.value}
+                      {toDollar(poolItem?.rewards[0]?.value)}
                     </Text>
                   </>
                 ) : null

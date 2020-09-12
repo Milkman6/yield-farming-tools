@@ -2,7 +2,7 @@ import { SYNTHETIX_STAKING_ABI } from '../../../data/constants'
 import { PoolToken, StakingPool } from '../../../data/token'
 import { Tokens } from '../../../data/TokenManager'
 import { PoolData, RiskLevel } from '../../../types'
-import { getSnxBasedBalPool } from '../../pool-templates/balancer-staking'
+import { getSnxBasedBalPool } from '../../pool-templates/lp-staking'
 
 const poolData: PoolData = {
   provider: 'yfv.finance',

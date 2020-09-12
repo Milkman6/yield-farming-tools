@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ethers } from 'ethers'
 import { ERC20_ABI } from './constants'
+import { SynthType } from '../types'
 
 export type TokenProps = {
   address: string
@@ -27,7 +28,7 @@ export class Token extends ethers.Contract {
     tokenId,
     scales = false,
   }: TokenProps) {
-    super(address, ABI, global.App.provider)
+    super(address, ABI, global?.App?.provider)
     this.ticker = ticker
     this.numBase = numBase
     this.tokenId = tokenId
@@ -58,7 +59,7 @@ export class Token extends ethers.Contract {
   }
 
   public async getBalance(address: string) {
-    if (address === global.App.YOUR_ADDRESS && global.App.isAnon) {
+    if (address === global?.App?.YOUR_ADDRESS && global?.App?.isAnon) {
       return 0
     }
     const balance = (await this.balanceOf(address)) / this.numBase
@@ -74,10 +75,16 @@ export class Token extends ethers.Contract {
 }
 
 export class SynthToken extends Token {
-  parentToken: Token
-  constructor(tokenData: TokenProps, parentToken: Token) {
+  public underlyingToken: Token
+  public synthType: SynthType
+  constructor(
+    tokenData: TokenProps,
+    synthType: SynthType,
+    underlyingToken: Token
+  ) {
     super(tokenData)
-    this.parentToken = parentToken
+    this.underlyingToken = underlyingToken
+    this.synthType = synthType
   }
 
   public async init() {
@@ -85,13 +92,67 @@ export class SynthToken extends Token {
   }
 
   public async getPrice(refresh?: boolean) {
-    if (refresh || !this.price) {
-      const parentTokenPrice = await this.parentToken.getPrice()
-      const exchangeRate = await this.contract.exchangeRateStored()
-      this.price = parentTokenPrice / exchangeRate
+    if (!refresh && this.price) {
+      return this.price
+    }
+    const underlyingTokenPrice = await this.underlyingToken.getPrice()
+
+    let exchangeRate
+    switch (this.synthType) {
+      case SynthType.CREAM:
+        exchangeRate = (await this.exchangeRateStored()) / 1e28
+        this.price = underlyingTokenPrice * exchangeRate
+        return this.price
+
+      case SynthType.YEARN:
+        exchangeRate = (await this.getPricePerFullShare()) / 1e18
+        this.price = underlyingTokenPrice * exchangeRate
+        return this.price
+    }
+  }
+
+  public async getUnderlyingToken() {
+    if (!this?.underlyingToken) {
+      return this
+    } else if (!this?.underlyingToken?.underlyingToken) {
+      return this.underlyingToken
+    } else {
+      return await this.underlyingToken.getUnderlyingToken()
+    }
+  }
+
+  public async getUnderlyingPrice() {
+    if (!this?.underlyingToken) {
+      return this.price
+    } else if (!this?.underlyingToken?.underlyingToken) {
+      return this.underlyingToken.price
+    } else {
+      return await this.underlyingToken.getUnderlyingPrice()
+    }
+  }
+
+  public async convertBalanceToUnderlying(balance: number) {
+    let convertedBalance: number
+    let exchangeRate
+
+    // todo: abstract this
+    switch (this.synthType) {
+      case SynthType.CREAM:
+        exchangeRate = (await this.exchangeRateStored()) / 1e28
+        convertedBalance = balance * exchangeRate
+        break
+      case SynthType.YEARN:
+        exchangeRate = (await this.getPricePerFullShare()) / 1e18
+        convertedBalance = balance * exchangeRate
+        break
     }
 
-    return this.price
+    if (this.underlyingToken?.synthType) {
+      convertedBalance = await this.underlyingToken.convertBalanceToUnderlying(
+        convertedBalance
+      )
+    }
+    return convertedBalance
   }
 }
 
@@ -100,6 +161,8 @@ export class PoolToken extends Token {
   poolToken2: Token
   totalTokenOneInPool: number
   totalTokenTwoInPool: number
+  tokenOneRatio: number
+  tokenTwoRatio: number
 
   constructor(
     tokenData: TokenProps,
@@ -133,6 +196,22 @@ export class PoolToken extends Token {
     }
   }
 
+  public async getTokenRatios() {
+    await this.getPrice()
+    await this.getTokenBalances()
+
+    this.tokenOneRatio =
+      (this.totalTokenOneInPool * this.poolToken1.price) /
+      (this.price * this.totalTokenSupply)
+
+    this.tokenTwoRatio = 1 - this.tokenOneRatio
+
+    return {
+      tokenOneRatio: this.tokenOneRatio,
+      tokenTwoRatio: this.tokenTwoRatio,
+    }
+  }
+
   public async getPrice(refresh?: boolean) {
     if (!refresh && this.price) {
       return this.price
@@ -146,8 +225,8 @@ export class PoolToken extends Token {
       this.totalTokenSupply
     )
     this.price =
-      (this.totalTokenTwoInPool * this.poolToken2.price +
-        this.totalTokenOneInPool * this.poolToken1.price) /
+      (this.totalTokenTwoInPool * (await this.poolToken2.getPrice()) +
+        this.totalTokenOneInPool * (await this.poolToken1.getPrice())) /
       this.totalTokenSupply
 
     return this.price
@@ -160,7 +239,7 @@ export class StakingPool extends Token {
     super(stakingPoolProps)
   }
   public async getMyRewards() {
-    if (global.App.isAnon) {
+    if (global?.App?.isAnon) {
       return 0
     }
     const rewards = (await this.earned(global.App.YOUR_ADDRESS)) / 1e18
