@@ -13,6 +13,7 @@ import { graphcms, linkSectionContents } from '../services/graph-cms-service'
 import { getPools } from '../utils/pool-data'
 import { FiFilter } from 'react-icons/fi'
 import { useFilterSidebarContext } from '../components/FilterSidebar'
+import { TokenManager } from '../data/TokenManager'
 
 export default ({ informationSection, toolSection, poolData }) => {
   const { onOpen } = useFilterSidebarContext()
@@ -81,15 +82,22 @@ export const getStaticProps = async () => {
   }
 }
 
+const initTokens = async () => {
+  const tokenManager = new TokenManager()
+  await tokenManager.getAllPrices()
+  return tokenManager.tokens
+}
+
 const prerenderPoolData = async () => {
   const ethApp = await initInfuraServer()
   if (ethApp) {
+    const tokens = await initTokens()
     const fetchedPools = []
     await Promise.all(
       Object.values(getPools).map(
         (getPoolData) =>
           new Promise((resolve) => {
-            ;(getPoolData(ethApp) as any)
+            ;(getPoolData(tokens) as any)
               .then((data) => {
                 fetchedPools.push(data)
                 resolve()
