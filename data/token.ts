@@ -9,7 +9,7 @@ export type TokenProps = {
   ABI?: any
   numBase?: number
   tokenId?: string
-  scales?: boolean
+  rebases?: boolean
 }
 
 export class Token extends ethers.Contract {
@@ -17,7 +17,7 @@ export class Token extends ethers.Contract {
   public numBase: number
   public price: number
   public totalTokenSupply: number
-  public scales: boolean
+  public rebases: boolean
   public tokenId: string
 
   public constructor({
@@ -26,13 +26,13 @@ export class Token extends ethers.Contract {
     ABI = ERC20_ABI,
     numBase = 1e18,
     tokenId,
-    scales = false,
+    rebases = false,
   }: TokenProps) {
     super(address, ABI, global?.App?.provider)
     this.ticker = ticker
     this.numBase = numBase
     this.tokenId = tokenId
-    this.scales = scales
+    this.rebases = rebases
   }
 
   public async init() {

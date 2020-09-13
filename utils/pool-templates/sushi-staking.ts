@@ -16,7 +16,8 @@ export async function getSushiPoolData(
   const poolToken1 = liquidityPool.poolToken1
   const poolToken2 = liquidityPool.poolToken2
 
-  const multiplier = await stakingPool.BONUS_MULTIPLIER()
+  // update to be dynamic
+  const multiplier = 1
   const poolInfo = await stakingPool.poolInfo(poolId)
   const rewardPerBlock = parseInt(poolInfo.allocPoint)
 
