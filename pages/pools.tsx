@@ -78,7 +78,8 @@ export const getStaticProps = async () => {
   const poolData = await prerenderPoolData()
 
   return {
-    revalidate: 1800,
+    revalidate: 3600,
+    unstable_revalidate: 3600,
     props: { ...sectionData, poolData: JSON.parse(JSON.stringify(poolData)) },
   }
 }
