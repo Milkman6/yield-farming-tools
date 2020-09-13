@@ -18,7 +18,6 @@ export const GasCost = () => {
   const getGasCosts = async () => {
     try {
       const gasData = await axios.get('https://www.gasnow.org/api/v3/gas/data')
-      console.log('getGasCosts -> gasData', gasData)
 
       setGasCost(gasData.data.data.gasPrices)
     } catch (err) {
