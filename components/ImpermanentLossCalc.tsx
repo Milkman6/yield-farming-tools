@@ -65,7 +65,7 @@ export const ImpermanentLossCalculator = () => {
   }, [debouncedImpermanentLoss])
 
   return (
-    <Box w="100%" pl={20}>
+    <Box w="100%">
       <Text color="gray.600" fontWeight="bold" pt="1rem" pl={1}>
         Impermanent Loss Estimator
       </Text>
