@@ -148,3 +148,20 @@ export async function asyncForEach(array, callback) {
 export async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export async function chainPromiseCalls(asyncFunctions = [], params) {
+  const fetched = []
+  console.log('chainPromiseCalls')
+
+  for (let i = 0; i < asyncFunctions.length; i++) {
+    try {
+      console.log('fetching')
+      const data = await asyncFunctions[i](params)
+      fetched.push(data)
+    } catch (e) {
+      console.error('error -> ', e)
+    }
+  }
+
+  return fetched
+}

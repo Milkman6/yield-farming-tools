@@ -14,6 +14,7 @@ import { getPools } from '../utils/pool-data'
 import { FiFilter } from 'react-icons/fi'
 import { useFilterSidebarContext } from '../components/FilterSidebar'
 import { TokenManager } from '../data/TokenManager'
+import { chainPromiseCalls } from '../utils/utils'
 
 export default ({ informationSection, toolSection, poolData }) => {
   const { onOpen } = useFilterSidebarContext()
@@ -77,7 +78,7 @@ export const getStaticProps = async () => {
   const poolData = await prerenderPoolData()
 
   return {
-    revalidate: 300,
+    revalidate: 1800,
     props: { ...sectionData, poolData: JSON.parse(JSON.stringify(poolData)) },
   }
 }
@@ -92,22 +93,9 @@ const prerenderPoolData = async () => {
   const ethApp = await initInfuraServer()
   if (ethApp) {
     const tokens = await initTokens()
-    const fetchedPools = []
-    await Promise.all(
-      Object.values(getPools).map(
-        (getPoolData) =>
-          new Promise((resolve) => {
-            ;(getPoolData(tokens) as any)
-              .then((data) => {
-                fetchedPools.push(data)
-                resolve()
-              })
-              .catch((e) => {
-                console.error(e)
-                resolve()
-              })
-          })
-      )
+    const fetchedPools = await chainPromiseCalls(
+      Object.values(getPools),
+      tokens
     )
     return fetchedPools
   }
