@@ -615,37 +615,37 @@ export const crvEthPool = async (tokens: Tokens) => {
   )
 }
 
-export const susdBasedPool = async (tokens: Tokens) => {
-  const poolId = 14
-  const stakingPool = new StakingPool({
-    address: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
-    ABI: MASTER_CHEF_ABI,
-  })
-  const liquidityPool = new PoolToken(
-    {
-      address: '0xaAD22f5543FCDaA694B68f94Be177B561836AE57',
-      ticker: 'UNI-V2',
-    },
-    {
-      poolToken1: tokens.susd,
-      poolToken2: tokens.based,
-    }
-  )
+// export const susdBasedPool = async (tokens: Tokens) => {
+//   const poolId = 14
+//   const stakingPool = new StakingPool({
+//     address: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
+//     ABI: MASTER_CHEF_ABI,
+//   })
+//   const liquidityPool = new PoolToken(
+//     {
+//       address: '0xaAD22f5543FCDaA694B68f94Be177B561836AE57',
+//       ticker: 'UNI-V2',
+//     },
+//     {
+//       poolToken1: tokens.susd,
+//       poolToken2: tokens.based,
+//     }
+//   )
 
-  return await getSushiPoolData(
-    {
-      stakingPool,
-      liquidityPool,
-      rewardToken: tokens.sushi,
-    },
-    poolId,
-    deepmerge(poolData, {
-      links: [
-        {
-          title: 'Pool',
-          link: `https://uniswap.info/pair/${liquidityPool.address}`,
-        },
-      ],
-    })
-  )
-}
+//   return await getSushiPoolData(
+//     {
+//       stakingPool,
+//       liquidityPool,
+//       rewardToken: tokens.sushi,
+//     },
+//     poolId,
+//     deepmerge(poolData, {
+//       links: [
+//         {
+//           title: 'Pool',
+//           link: `https://uniswap.info/pair/${liquidityPool.address}`,
+//         },
+//       ],
+//     })
+//   )
+// }
