@@ -16,7 +16,7 @@ export const Footer = () => (
       display="flex"
       alignItems="center"
       justifyContent="center"
-      href="https://gitcoin.co/grants/1017/yield-farming-tools"
+      href="https://gitcoin.co/grants/1170/yield-farming-tools-2"
       target="_blank"
       rel="noopener"
       fontSize="sm"
