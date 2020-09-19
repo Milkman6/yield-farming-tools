@@ -361,7 +361,7 @@ export const yfiUsdc = async (tokens: Tokens) => {
 
 export const crCreamStaking = async (tokens: Tokens) => {
   const stakingPool = new StakingPool({
-    address: '0x71A808Fd21171d992ebc17678e8ae139079922d0',
+    address: '0x224061756c150e5048a1e4a3E6E066db35037462',
     ABI: SYNTHETIX_STAKING_ABI,
   })
 
