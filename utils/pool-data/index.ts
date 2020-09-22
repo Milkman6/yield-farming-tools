@@ -8,6 +8,7 @@ import * as yearnVaults from './pools/yearn'
 import * as yffiPools from './pools/yffi'
 import * as yfiiPools from './pools/yfii'
 import * as yfvPools from './pools/yfv'
+import * as uniPools from './pools/uniswap'
 
 export const getPools = {
   ...omenPools,
@@ -20,4 +21,5 @@ export const getPools = {
   ...creamPools,
   ...yffiPools,
   ...yfiiPools,
+  ...uniPools,
 }

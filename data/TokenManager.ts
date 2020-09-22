@@ -82,9 +82,10 @@ export class TokenManager {
     })
 
     this.tokens.wbtc = new Token({
-      address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+      address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
       ticker: 'WBTC',
       tokenId: 'bitcoin',
+      numBase: 1e8,
     })
 
     this.tokens.based = new Token({
@@ -218,6 +219,13 @@ export class TokenManager {
       ticker: 'mUSD',
       tokenId: 'musd',
     })
+
+    this.tokens.uni = new Token({
+      address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+      ticker: 'UNI',
+      tokenId: 'uniswap',
+    })
+
     this.tokens.crCream = new SynthToken(
       {
         address: '0x892b14321a4fcba80669ae30bd0cd99a7ecf6ac0',
@@ -328,6 +336,7 @@ export type Tokens = {
   yfii: Token
   mta: Token
   musd: Token
+  uni: Token
   crCream: SynthToken
   crYfi: SynthToken
   yUsd: SynthToken

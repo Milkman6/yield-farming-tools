@@ -1,5 +1,4 @@
 import { Link, Stack, Text } from '@chakra-ui/core'
-import { FaGithub, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 export const Footer = () => (
   <Stack spacing={2} py={4} alignItems="flex-start" pl="15px">
     <Link
@@ -24,28 +23,5 @@ export const Footer = () => (
     >
       Support development
     </Link>
-    {/* <Stack isInline justifyContent="center" spacing={3}>
-      <Link
-        href="https://t.me/yield_farming"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <FaTelegramPlane />
-      </Link>
-      <Link
-        href="https://twitter.com/CarterMcAIister"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <FaTwitter />
-      </Link>
-      <Link
-        href="https://github.com/CarterMcalister/yield-farming-tools"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <FaGithub />
-      </Link>
-    </Stack> */}
   </Stack>
 )
