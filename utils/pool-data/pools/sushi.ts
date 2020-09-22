@@ -615,6 +615,41 @@ export const crvEthPool = async (tokens: Tokens) => {
   )
 }
 
+export const uniEthPool = async (tokens: Tokens) => {
+  const poolId = 18
+  const stakingPool = new StakingPool({
+    address: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
+    ABI: MASTER_CHEF_ABI,
+  })
+  const liquidityPool = new PoolToken(
+    {
+      address: '0xDafd66636E2561b0284EDdE37e42d192F2844D40',
+      ticker: 'SLP',
+    },
+    {
+      poolToken1: tokens.weth,
+      poolToken2: tokens.uni,
+    }
+  )
+
+  return await getSushiPoolData(
+    {
+      stakingPool,
+      liquidityPool,
+      rewardToken: tokens.sushi,
+    },
+    poolId,
+    deepmerge(poolData, {
+      links: [
+        {
+          title: 'Pool',
+          link: `https://sushiswap.vision/pair/${liquidityPool.address}`,
+        },
+      ],
+    })
+  )
+}
+
 // export const susdBasedPool = async (tokens: Tokens) => {
 //   const poolId = 14
 //   const stakingPool = new StakingPool({
